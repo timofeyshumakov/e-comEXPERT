@@ -1,0 +1,138 @@
+mixin img(className,src,alt,tabIndex,loading)
+  if alt !== undefined
+    img(class=`${className}` src=`assets/img/${src}` alt=`${alt}` title=`${alt}`)
+  else
+    img(class=`${className}` src=`assets/img/${src}`)
+
+mixin linkButton(className,caption,link,target)
+  form(action=`${link}`) 
+    button(class=`${className}` target=`${target}`)= caption
+mixin actionButton(className,caption,id)
+  if id !== ' '
+    button(class=`${className}` id= id)= caption
+  else
+    button(class=`${className}`)= caption
+mixin logo(bemBlock)
+  -newBlock = 'logo'
+  div(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
+    +img(`${newBlock}` + '-img', 'logo.svg', 'logo')
+    div(class=`${newBlock}` + '-txt') Acc Pool
+
+mixin column(colTitle,colTxt,bemBlock)
+  -newBlock = 'column'
+  div(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
+
+    -colTitle.forEach(function callback(val, index) {
+      -bemBlock = `${newBlock}__`
+      div(class=`${bemBlock}` + 'block')
+        div(class=`${bemBlock}` + 'title')=colTitle[index]
+        div(class=`${bemBlock}` + 'txt')=colTxt[index]
+      if index < colTitle.length - 1
+        span(class=`${bemBlock}` + 'line')
+      else if pool === 'hathor' && pageName === 'miners' && subpageName !== 'index'
+        span(class=`${bemBlock}` + 'line')
+    -});
+
+mixin columnCenter(colTitle, colTxt, colTitle2, bemBlock)
+  -newBlock = 'column'
+  if pageName === 'statistics'
+    div(class=`${bemBlock}` + newBlock + ` column-center ${newBlock} statistics-column`)
+      -colTitle.forEach(function callback(val, index) {
+        -bemBlock = `${newBlock}__`
+        if colTitle[index] != ''
+          if pageName === 'index' || pageName === 'start' || pageName === 'statistics' || pageName === 'blocks'
+            div(class=`${bemBlock}` + 'title index-title')=colTitle[index]
+          else
+            div(class=`${bemBlock}` + 'title statistics-title')=colTitle[index]
+        if colTxt[index] != ''
+          div(class=`${bemBlock}` + 'txt column-centered-txt')=colTxt[index]
+        if colTitle2[index] != ''
+          if pageName === 'index' || pageName === 'start' || pageName === 'statistics' || pageName === 'blocks'
+            div(class=`${bemBlock}` + 'title index-title')=colTitle2[index]
+          else
+            div(class=`${bemBlock}` + 'title index-title')=colTitle2[index]
+        if pageName === 'index' || pageName === 'miners' && subpageName === 'index' || pageName === 'start' || pageName === 'blocks' || pageName === 'statistics'
+          a(class=`${bemBlock}img-link` href = `${pool}-pool-how-to-start-mining.html`)
+            img(class=`${bemBlock}img` src='assets/img/get-started-dark.svg' id="get-started")
+    -});
+  else
+    div(class=`${bemBlock}` + newBlock + ` column-center ${newBlock}`)
+      -colTitle.forEach(function callback(val, index) {
+        -bemBlock = `${newBlock}__`
+        if colTitle[index] != ''
+          if pageName === 'index' || pageName === 'miners' && subpageName !== 'transactions' || pageName === 'start' || pageName === 'statistics' || pageName === 'blocks' || pageName === 'miners' && subpageName === 'transactions' && pool === 'hathor'
+            div(class=`${bemBlock}` + 'title index-title')=colTitle[index]
+          else
+            div(class=`${bemBlock}` + 'title')=colTitle[index]
+        if colTxt[index] != ''
+          div(class=`${bemBlock}` + 'txt column-centered-txt')=colTxt[index]
+        if colTitle2[index] != ''
+          if pageName === 'index' || pageName === 'start' || pageName === 'statistics' || pageName === 'blocks'
+            div(class=`${bemBlock}` + 'title index-title')=colTitle2[index]
+          else
+            div(class=`${bemBlock}` + 'title index-title')=colTitle2[index]
+        if pageName === 'index' || pageName === 'miners' && subpageName === 'index' || pageName === 'start' || pageName === 'blocks' || pageName === 'statistics'
+          a(class=`${bemBlock}img-link` href = `${pool}-pool-how-to-start-mining.html`)
+            img(class=`${bemBlock}img` src='assets/img/get-started-dark.svg' id="get-started")
+    -});
+
+mixin columnNews(colTitleTop, colTitle, colTxt, bemBlock)
+  -newBlock = 'column'
+  div(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
+    -colTitle.forEach(function callback(val, index) {
+      -bemBlock = `${newBlock}__`
+      div(class=`${bemBlock}` + 'block')
+        div(class=`${bemBlock}` + 'title-top')=colTitleTop[index]
+        div(class=`${bemBlock}` + 'title')=colTitle[index]
+        div(class=`${bemBlock}` + 'txt')=colTxt[index]
+    -});
+
+mixin socials(socialsLogo, socialsName, socialsLink, bemBlock)
+  -newBlock = 'socials'
+    div(class=`${bemBlock}` + newBlock)
+      -socialsLogo.forEach(function callback(val, index) {
+      -newBlock = 'social'
+      div(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
+        -bemBlock = `${newBlock}__`
+        +img(`${bemBlock}` + 'logo', `socials/${socialsLogo[index]}.svg`)
+        div(class=`${bemBlock}` + 'info')
+          div(class=`${bemBlock}` + 'title')=socialsName[index]
+          div(class=`${bemBlock}` + 'txt')=socialsLink[index]
+        +img(`${bemBlock}` + 'arrow', `icons/arrow.svg`)
+      -});
+
+mixin pagination(bemBlock)
+  -newBlock = 'pagination'
+  div(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
+    -bemBlock = `${newBlock}__`
+    img(class = `${bemBlock}` + 'img' + ' arrow' src=`assets/img/icons/arrow-white.svg` id="back")
+    div(class=`${bemBlock}` + 'numbers')
+    img(class = `${bemBlock}` + 'img' + ' arrow' src=`assets/img/icons/arrow-white.svg` id="forward")
+
+mixin navigation(subpageName)
+  div(class='navigation__info')
+    span(id = 'tableFrom') 1
+    span  to 
+    span(id = 'tableTo') #{itemsOnTable}
+    span  of 
+    span(id = 'tableOf') #{k}
+    span= subpageName
+
+mixin subpges-nav(subpageName)
+  nav(class='subpages-nav')
+    ul(class='subpages-nav__list')
+      -tableTitle = ['Workers', 'Transactions', 'Earnings', 'Hashrate & Shares', 'Settings']
+      -img = ['header/nav/miners', 'icons/transactions', 'icons/earnings', 'icons/hashrate', 'icons/settings']
+      -links = ['workers', 'transactions-credit', 'dollar-earnings', 'dollar-hashrate&shares', 'dollar-settings']
+      -i = 0
+      each row in tableTitle
+        if subpageName === 'workers' && i === 0 || subpageName === 'transactions' && i === 1 || subpageName === 'earnings' && i === 2 || subpageName === 'hashrate' && i === 3 || subpageName === 'settings' && i === 4 
+          li(class='subpages-nav__item active-subpage')
+            +img('subpages-nav__img', `${img[i]}.svg`)
+            a(href=`${pool}-pool-miners-${links[i]}.html` class="subpages-nav__link")= row
+            -i++
+        else
+          li(class='subpages-nav__item')
+            +img('subpages-nav__img', `${img[i]}.svg`)
+            a(href=`${pool}-pool-miners-${links[i]}.html` class="subpages-nav__link")= row
+            -i++

@@ -1,0 +1,20 @@
+include mixins.pug
+-sectionName= 'header'
+-bemBlock = `${sectionName}__`
+header(class=`${sectionName}` id=`${sectionName}`)
+  -newBlock = 'container'
+  div(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
+    div(class=`${bemBlock}left`)
+      +img(`${bemBlock}logo`, 'logo.svg')
+      div(class=`${bemBlock}tel`) +7 495 109-51-20
+    nav(class=`${bemBlock}menu menu`)
+      -bemBlock = `menu__`
+      -menuLinks = ['Услуги', 'Решения', 'Проекты', 'Компания', 'Контакты']
+      -menuHrefs = ['#', '#', '#', '#', '#']
+      ul(class=`${bemBlock}` + 'list'  id="headerContainer")
+        -i = 0
+        each link in menuLinks
+          li(class=`${bemBlock}` + 'item')
+            a(class=`${bemBlock}link` href= `${menuHrefs[i]}`)= link
+          -i++
+      button(class=`header__button`) Связаться

@@ -1,0 +1,270 @@
+@import "vars.sass"
+
+/*#fonts*/
+@font-face
+  font-style: bold
+  font-weight: 700
+  font-display: swap
+  font-family: "Montserrat-Bold"
+  src: local("Montserrat-Bold")
+  src: url("../fonts/Montserrat-Bold.woff2") format("woff2")
+  src: url("../fonts/Montserrat-Bold.woff") format("woff")
+  src: url("../fonts/Montserrat-Bold.woff") format("truetype")
+
+@font-face
+  font-style: extrabold
+  font-weight: 800
+  font-display: swap
+  font-family: "Montserrat"
+  src: local("Montserrat-ExtraBold"),
+  src: url("../fonts/Montserrat-ExtraBold.woff2") format("woff2"),
+  src: url("../fonts/Montserrat-ExtraBold.woff") format("woff"),
+  src: url("../fonts/Montserrat-ExtraBold.woff") format("truetype")
+
+@font-face
+  font-style: semibold
+  font-weight: 600
+  font-display: swap
+  font-family: "Montserrat"
+  src: local("Montserrat-SemiBold"),
+  src: url("../fonts/Montserrat-SemiBold.woff2") format("woff2"),
+  src: url("../fonts/Montserrat-SemiBold.woff") format("woff"),
+  src: url("../fonts/Montserrat-SemiBold.woff") format("truetype")
+
+@font-face
+  font-style: regular
+  font-weight: 500
+  font-display: swap
+  font-family: "Montserrat"
+  src: local("Montserrat-Regular"),
+  src: url("../fonts/Montserrat-Regular.woff2") format("woff2"),
+  src: url("../fonts/Montserrat-Regular.woff") format("woff"),
+  src: url("../fonts/Montserrat-Regular.woff") format("truetype")
+
+@font-face
+  font-style: light
+  font-weight: 300
+  font-display: swap
+  font-family: "Montserrat"
+  src: local("Montserrat-Light"),
+  src: url("../fonts/Montserrat-Light.woff2") format("woff2"),
+  src: url("../fonts/Montserrat-Light.woff") format("woff"),
+  src: url("../fonts/Montserrat-Light.woff") format("truetype")
+
+@font-face
+  font-style: medium
+  font-weight: 500
+  font-display: swap
+  font-family: "Montserrat"
+  src: local("Montserrat-Medium"),
+  src: url("../fonts/Montserrat-Medium.woff2") format("woff2"),
+  src: url("../fonts/Montserrat-Medium.woff") format("woff"),
+  src: url("../fonts/Montserrat-Medium.woff") format("truetype")
+
+@keyframes spin
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(360deg)
+
+@keyframes underline
+  0%
+    width: 0
+  100%
+    width: 100%
+
+/*#scrollbar*/
+body::-webkit-scrollbar-track
+  background-color: $blue
+
+body::-webkit-scrollbar-thumb
+  border-radius: 0.5rem
+  background-color: $white
+
+body::-webkit-scrollbar-thumb:active
+  background-color: $white
+  border: 0.1rem solid $blue
+
+body::-webkit-scrollbar
+  width: 0.6rem
+  background-color: $blue
+
+/*#common*/
+body
+  font: 500 16px /1 $ff
+  color: $black
+  scroll-behavior: smooth
+  background: $white
+  overflow-x: hidden
+
+.wrapper
+  max-width: 1440px
+  margin: 0 auto
+
+.container
+  display: flex
+  flex-direction: column
+  padding: 0 4.375rem
+  margin: 0 auto
+  box-sizing: content-box
+  max-width: 81.25rem
+  justify-content: space-between
+  align-items: center
+
+a
+  color: $black
+  cursor: pointer
+
+h2
+  font-weight: 700
+  font-size: 1.66rem
+
+.header
+  padding: 1rem 0
+  background: $white
+
+.header__
+
+  &container
+    flex-direction: row
+  
+  &left
+    display: flex
+    align-items: center
+    gap: 0.5rem
+
+  &menu
+    display: flex
+    gap: 3rem
+    align-items: center
+
+  &logo
+    width: 10rem
+    height: 1.25rem
+
+  &tel
+    font-weight: 600
+    font-size: 13px
+    color: #333
+
+  &button
+    border: 1px solid $black
+    border-radius: 2px
+    padding: 0.75rem 3.9rem
+
+.menu__
+
+  &list
+    display: flex
+    align-items: center
+    gap: 3rem
+
+.info
+  color: $white
+
+.info__
+
+  &container
+    min-height: 20rem
+    padding-top: 2rem
+    padding-bottom: 2rem
+    justify-content: center
+    gap: 1.5rem
+
+  &title
+    font: 600 2.72rem /1 $ff
+
+  &subtitle
+    display: flex
+    align-items: center
+    gap: 1rem
+
+  &subtitle-img
+    width: 100px
+    height: 58px
+    border-radius: 0.5rem
+
+  &subtitle-txt
+    font-weight: 600
+    font-size: 1.66rem
+    color: $white
+
+  &txt
+    font-weight: 500
+    font-size: 1.17rem
+
+  &bg
+    position: absolute
+    z-index: -1
+    top: 0
+    height: 28.5rem
+    width: 100vw
+    max-width: 1440px
+
+.consultation
+  padding: 5.5rem 4.375rem
+
+.consultation__
+
+  &container
+    background-image: url(../img/consultation/bg.jpg)
+    min-height: 236px
+    background-size: cover
+    border-radius: 0.5rem
+    background-repeat: no-repeat
+    color: $white
+    gap: 2rem
+    justify-content: center
+
+  &button
+    color: $red
+    border-radius: 10px
+    padding: 10px
+    background: $white
+    font-size: 1.15rem
+    font-weight: 500
+
+.footer
+  padding: 1rem 0
+
+.footer__
+
+  &container
+    gap: 2rem
+
+  &nav
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: flex-start
+    gap: 1rem
+    line-height: 1.25
+
+  &img
+    margin-top: 2rem
+
+  &copyright
+    display: flex
+    justify-content: flex-start
+    gap: 2.5rem
+    align-items: center
+    width: 100%
+
+  &copyright-item
+    text-decoration: underline
+    text-decoration-skip-ink: none
+    color: #999
+
+.сopyright
+  margin-left: auto
+
+.footer-list
+    width: 21%
+    display: flex
+    flex-direction: column
+    gap: 0.75rem
+
+.footer-list__
+
+  &title
+    margin-bottom: 0.75rem

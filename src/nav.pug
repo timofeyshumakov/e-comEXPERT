@@ -1,0 +1,38 @@
+include mixins.pug
+-menuItems = ['Home', 'Menu', 'Events','About us']
+  -newBlock = 'mining-nav'
+  -var links= ['Miners', 'Blocks', 'Pool statistics', 'Network statistics', 'Getting started'];
+  -var linksHref= ['miners', 'blocks', 'statistics', 'network-statistics', 'how-to-start-mining']
+  -var src= ['miners', 'blocks', 'stats', 'network', 'start', 'start', 'start'];
+  nav(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
+    -bemBlock = `${newBlock}__`
+    -newBlock = 'pool-logo'
+    a(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
+      +img(`${bemBlock}` + 'img', `pools/${pool}.svg`, 'blog img',  0)
+      -poolTitle = pool + ' pool'
+      span(class=`${bemBlock}` + 'txt')=poolTitle
+    -newBlock = 'mining-nav'
+    -bemBlock = `${newBlock}__`
+    ul(class=`${bemBlock}` + 'links')
+      -links.forEach(function callback(val, index) {
+        if pageName === "miners" && index === 0 || pageName === 'blocks' &&  index === 1 || subpageName === 'pool' &&  index === 2 || subpageName === 'network' &&  index === 3 || pageName === 'start' && index === 4
+          li(class=`${bemBlock}` + 'item acitve-page')
+            if index === 3
+              a(class=`${bemBlock}` + 'link' href=`${pool}-${linksHref[index].toLowerCase().replace(" ", '-')}.html`)
+                +img(`${bemBlock}` + 'link-img', `header/nav/${src[index]}.svg`, `${links[index]}`,  0)
+                span(class=`${bemBlock}` + 'link-txt')=val
+            else
+              a(class=`${bemBlock}` + 'link' href=`${pool}-pool-${linksHref[index].toLowerCase().replace(" ", '-')}.html`)
+                +img(`${bemBlock}` + 'link-img', `header/nav/${src[index]}.svg`, `${links[index]}`,  0)
+                span(class=`${bemBlock}` + 'link-txt')=val
+        else
+          li(class=`${bemBlock}` + 'item')
+            if index === 3
+              a(class=`${bemBlock}` + 'link' href=`${pool}-${linksHref[index].toLowerCase().replace(" ", '-')}.html`)
+                +img(`${bemBlock}` + 'link-img', `header/nav/${src[index]}.svg`, `${links[index]}`,  0)
+                span(class=`${bemBlock}` + 'link-txt')=val
+            else
+              a(class=`${bemBlock}` + 'link' href=`${pool}-pool-${linksHref[index].toLowerCase().replace(" ", '-')}.html`)
+                +img(`${bemBlock}` + 'link-img', `header/nav/${src[index]}.svg`, `${links[index]}`,  0)
+                span(class=`${bemBlock}` + 'link-txt')=val
+      -});

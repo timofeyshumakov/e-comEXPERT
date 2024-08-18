@@ -1,0 +1,29 @@
+include mixins.pug
+-sectionName= 'footer'
+-bemBlock = `${sectionName}__`
+footer(class=`${sectionName}`)
+  -newBlock = 'container'
+  div(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
+    nav(class=`${bemBlock}nav`)
+      -i=0
+      each list in [[{txt: 'Услуги', href: '#'}, {txt: 'Электронная коммерция', href: '#'}, {txt: 'Разработка веб-ресурсов для автозапчастей и автотоваров', href: '#'}, {txt: 'Внедрение Битрикс24', href: '#'}, {txt: 'Услуги', href: '#', src: 'logo.svg'}], [{txt: 'Решения', href: '#'}, {txt: 'Интернет-магазин автозапчастей', href: '#'}, {txt: 'Сервис подбора запчастей', href: '#'}, {txt: 'Интернет-магазин запчастей для спецтехники и грузовиков', href: '#'}, {txt: 'Сайт для СТО', href: '#'}, {txt: 'Карта лояльности для клиентов автомагазинов', href: '#'}, {txt: 'Интернет-магазин по продаже б/у запчастей', href: '#'}], [{txt: 'Проекты', href: '#'}, {txt: 'E-commerce', href: '#'}, {txt: 'B2B-порталы', href: '#'}, {txt: 'Мобильная разработка', href: '#'}, {txt: 'Битрикс24', href: '#'}], [{txt: 'Контакты', href: '#'}, {txt: '+7 495 109-51-20', href: '#'}, {txt: 'info@e-comexpert.ru', href: '#'}, {txt: 'г. Москва, ул. Затонная, д.12, корп.2', href: '#'}, {txt: 'Telegram', href: '#'}, {txt: 'Telegram', href: '#', src: 'footer/arda.png'}]]
+        //- , '', '', ''], ['Решения', 'Интернет-магазин автозапчастей', 'Сервис подбора запчастей', 'Интернет-магазин запчастей для спецтехники и грузовиков', 'Сайт для СТО', 'Карта лояльности для клиентов автомагазинов', 'Интернет-магазин по продаже б/у запчастей'], ['Проекты', 'E-commerce', 'B2B-порталы', 'Мобильная разработка', 'Битрикс24', 'Веб-ресурсы для автозапчастей'], ['Контакты', '+7 495 109-51-20', 'info@e-comexpert.ru', 'г. Москва, ул. Затонная, д.12, корп.2', 'Telegram']]
+        -ii=0
+        ul(class=`${bemBlock}list footer-list`)
+          -bemBlock = `footer-list__`
+          each item in list
+            if item.src !== undefined
+              +img('footer__img', item.src)
+            else if ii !== 0
+              li(class=`${bemBlock}item`)
+                a(class=`${bemBlock}link`)= item.txt
+            else
+              li(class=`${bemBlock}item`)
+                h2(class=`${bemBlock}title`)= item.txt
+            -ii++
+        -i++
+    -bemBlock = `${sectionName}__`
+    div(class=`${bemBlock}copyright`)
+      a(class=`${bemBlock}copyright-item` href="https://e-comexpert.ru/agreement/") Пользовательское соглашение
+      a(class=`${bemBlock}copyright-item` href="https://e-comexpert.ru/privacy/") Политика в отношении обработки персональных данных
+      div(class=`${bemBlock}copyright-item сopyright`) Copyright © 2024 e-comExpert

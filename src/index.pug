@@ -1,0 +1,49 @@
+include mixins.pug
+doctype html
+html(lang="ru")
+  head
+    meta(charset='UTF-8')
+    meta(name='format-detection' content="telephone=yes")
+    meta(name="robots" content="index, follow")
+    meta(name="keywords" content="")
+    meta(name="description" content="")
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    link(rel='icon' type='image/x-icon' href='assets/img/logo.svg')
+    title e-comEXPERT
+    link(rel='stylesheet' href='assets/css/style.css')
+    link(rel='stylesheet' href='assets/css/reset.css')
+  body
+    .wrapper
+      include header.pug
+      main.main
+        -sectionNumber++
+        -sectionName= 'info'
+        -bemBlock = `${sectionName}__`
+        section(class='main__' + `${sectionName} ${sectionName}` id=`${sectionName}`)
+          +img(`${bemBlock}bg`, `${sectionName}/bg.jpg`)
+          div(class=`${bemBlock}container`).container
+            h1(class=`${bemBlock}title`) Внедрение Битрикс24 с e-comEXPERT
+            div(class=`${bemBlock}subtitle`)
+              +img(`${bemBlock}subtitle-img`, `${sectionName}/main-img.jpg`, 'Бизнес-партнер Битрикс24')
+              h2(class=`${bemBlock}subtitle-txt`) Бизнес-партнер Битрикс24
+            div(class=`${bemBlock}txt`) Перенесите в единое пространство и автоматизируйте все рабочие коммуникации, продажи и бизнес-процессы
+        -sectionName= 'consultation'
+        -bemBlock = `${sectionName}__`
+        section(class='main__' + `${sectionName} ${sectionName}` id=`${sectionName}`)
+          div(class=`${bemBlock}container`).container
+            h2(class=`${bemBlock}title`) Получите консультацию по внедрению Битрикс-24 в ваш бизнес
+            form(action="#")
+              button(class=`${bemBlock}button`) Получить бесплатно
+        -sectionName= 'services'
+        -bemBlock = `${sectionName}__`
+        section(class='main__' + `${sectionName} ${sectionName}` id=`${sectionName}`)
+          div(class=`${bemBlock}container`).container
+            h2(class=`${bemBlock}title`) e-comEXPERT оказывает полный комплекс услуг по внедрению и поддержке Битрикс24
+            div(class=`${bemBlock}cards`)
+              -i = 1
+              each card in ['Анализ и предпроектные исследования', 'Внедрение CRM Битрикс24 под ключ', 'Настройка бизнес-процессов', 'Кастомизация коробочного Битрикс-24 ', 'Техническая поддержка Битрикс-24 ', 'Обучение персонала', 'Интеграции с телефонией и мессенджерами', 'Интеграции с 1С, Jira и другими бизнес-сервисами', 'Настройка CRM-маркетинга']
+                div(class=`${bemBlock}card services-card`)
+                  +img(`services-card__img`, `${sectionName}/${i}.svg`)
+                  div(class=`services-card__txt`)= card
+                -i++
+      include footer.pug
