@@ -10,8 +10,9 @@ html(lang="ru")
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
     link(rel='icon' type='image/x-icon' href='assets/img/logo.svg')
     title e-comEXPERT
-    link(rel='stylesheet' href='assets/css/style.css')
     link(rel='stylesheet' href='assets/css/reset.css')
+    link(rel='stylesheet' href='assets/css/style.css')
+    script(src="assets/js/script.js")
   body
     .wrapper
       include header.pug
@@ -20,30 +21,344 @@ html(lang="ru")
         -sectionName= 'info'
         -bemBlock = `${sectionName}__`
         section(class='main__' + `${sectionName} ${sectionName}` id=`${sectionName}`)
-          +img(`${bemBlock}bg`, `${sectionName}/bg.jpg`)
           div(class=`${bemBlock}container`).container
             h1(class=`${bemBlock}title`) Внедрение Битрикс24 с e-comEXPERT
             div(class=`${bemBlock}subtitle`)
               +img(`${bemBlock}subtitle-img`, `${sectionName}/main-img.jpg`, 'Бизнес-партнер Битрикс24')
               h2(class=`${bemBlock}subtitle-txt`) Бизнес-партнер Битрикс24
             div(class=`${bemBlock}txt`) Перенесите в единое пространство и автоматизируйте все рабочие коммуникации, продажи и бизнес-процессы
-        -sectionName= 'consultation'
+        -sectionName= 'capabilities'
         -bemBlock = `${sectionName}__`
         section(class='main__' + `${sectionName} ${sectionName}` id=`${sectionName}`)
           div(class=`${bemBlock}container`).container
-            h2(class=`${bemBlock}title`) Получите консультацию по внедрению Битрикс-24 в ваш бизнес
-            form(action="#")
-              button(class=`${bemBlock}button`) Получить бесплатно
+            h2(class=`${bemBlock}title`) Возможности Битрикс24
+            div(class=`${bemBlock}body`)
+              +img(`${bemBlock}decor`, `${sectionName}/decor.svg`)
+              ul(class=`${bemBlock}list`)
+                each item in ['CRM', 'Онлайн-офис', 'Задачи и проекты', 'Автоматизация', 'Телефония, почта и мессенджеры', 'Интеграция 1С']
+                  if item === 'CRM'
+                    li(class=`${bemBlock}item active-capability`)= item
+                  else
+                    li(class=`${bemBlock}item`)= item
+              div(class=`${bemBlock}cards`)
+                div(class=`${bemBlock}card`)
+                  +img(`${bemBlock}card-img`, `${sectionName}/1.png`)
+                  div(class=`${bemBlock}card-txt`) Ведите клиентскую базу в одном месте, подключив все каналы продаж: телефон, сайт, почту, соцсети и мессенджеры.
+                div(class=`${bemBlock}card`)
+                  +img(`${bemBlock}card-img`, `${sectionName}/2.png`)
+                  div(class=`${bemBlock}card-txt`) Создайте для сотрудников единый онлайн-офис: общайтесь в мессенджере и через видеозвонки, используйте календарь, вместе редактируйте документы, храните файлы на корпоративном диске.
+                div(class=`${bemBlock}card`)
+                  +img(`${bemBlock}card-img`, `${sectionName}/3.png`)
+                  div(class=`${bemBlock}card-txt`) Организуйте работу в удобном таск-трекере: длегируйте, управляйте сроками, назначайте ответственных, создавайте шаблоны задач.
+                div(class=`${bemBlock}card`)
+                  +img(`${bemBlock}card-img`, `${sectionName}/4.png`)
+                  div(class=`${bemBlock}card-txt`) Автоматизируйте всё, что мешает двигаться вперед — рутинные задачи, работу со сделками, согласование договоров, оплату счетов, отчетность триггерные рассылки.
+                div(class=`${bemBlock}card`)
+                  +img(`${bemBlock}card-img`, `${sectionName}/5.png`)
+                  div(class=`${bemBlock}card-txt`) Общайтесь с клиентами в одном месте через любые каналы связи - от соцсетей до телефонии
+                div(class=`${bemBlock}card`)
+                  +img(`${bemBlock}card-img`, `${sectionName}/6.png`)
+                  div(class=`${bemBlock}card-txt`) Обменивайтесь данными между 1Си CRM быстро и без потери информации. Подключим автоматическую синхронизацию изменений.
         -sectionName= 'services'
         -bemBlock = `${sectionName}__`
         section(class='main__' + `${sectionName} ${sectionName}` id=`${sectionName}`)
           div(class=`${bemBlock}container`).container
-            h2(class=`${bemBlock}title`) e-comEXPERT оказывает полный комплекс услуг по внедрению и поддержке Битрикс24
+            h2(class=`${bemBlock}title`) 
+              p e-comEXPERT оказывает полный комплекс услуг
+              p по внедрению и поддержке Битрикс24
             div(class=`${bemBlock}cards`)
               -i = 1
+              -back = ['', 'Настройка CRM под компанию любого размера: от добавления пользователей в портал, до сложных интеграций с 1С и другими программами.', 'Автоматизация портала Битрикс24 под задачи Компании: процесс обработки лидов, создание счетов, построение и постановка задач, согласование отпуска и многое другое.', 'Доработка портала под задачи Компании - создание и доработка нестандартных отчетов, доработка интерфейса Б24, создание новых страниц и сущностей и многое другое.', 'Техническое сопровождение портала, консультации по продукту, реализация новых задач.', 'Обучение по работе на портале Битрикс24, предоставление методических материалов.', 'Интеграция Битрикс24 с каналами коммуникации и  привлечения клиентов - фиксация лидов, общение с клиентами в режиме "одного окна".', 'Обмен данными о клиентах, товарах, счетах, задачах, стандартных и нестандартных сущностей.', 'Настройка сквозной аналитики в Битрикс24, формирование отчетов по UTM-меткам.']
               each card in ['Анализ и предпроектные исследования', 'Внедрение CRM Битрикс24 под ключ', 'Настройка бизнес-процессов', 'Кастомизация коробочного Битрикс-24 ', 'Техническая поддержка Битрикс-24 ', 'Обучение персонала', 'Интеграции с телефонией и мессенджерами', 'Интеграции с 1С, Jira и другими бизнес-сервисами', 'Настройка CRM-маркетинга']
                 div(class=`${bemBlock}card services-card`)
-                  +img(`services-card__img`, `${sectionName}/${i}.svg`)
-                  div(class=`services-card__txt`)= card
+                  div(class=`${bemBlock}card services-card-front`)
+                    if i === 4 || i === 5
+                      +img(`services-card__img`, `${sectionName}/${i}.png`)
+                    else
+                      +img(`services-card__img`, `${sectionName}/${i}.svg`)
+                    div(class=`services-card__txt`)= card
+                  if back[i - 1] === ''
+                    div(class=`${bemBlock}card services-card-back`)
+                      ul
+                        li Аналитика бизнес-процессов компании;
+                        li Системный анализ топологии сети;
+                        li Формализация требований;
+                        li Поиск оптимальных путей решения задачи;
+                        li Разработка концепции поэтапного внедрения;
+                        li Написание технического задания.
+                  else
+                    div(class=`${bemBlock}card services-card-back`)= back[i - 1]
                 -i++
+        -sectionName= 'consultation'
+        -bemBlock = `${sectionName}__`
+        section(class='main__' + `${sectionName} ${sectionName}` id=`${sectionName}`)
+          div(class=`${bemBlock}container`).container
+            h2(class=`${bemBlock}title`) 
+              span.highlight Получите консультацию
+              span по внедрению Битрикс-24 в ваш бизнес
+            button(class=`${bemBlock}button`) Получить бесплатно
+        -sectionName= 'tariffs'
+        -bemBlock = `${sectionName}__`
+        section(class='main__' + `${sectionName} ${sectionName}`)
+          div(class=`${bemBlock}container`).container
+            h2(class=`${bemBlock}title`) Тарифы
+            div(class=`${bemBlock}buttons`)
+              button(class=`${bemBlock}button active-button` id="cloudTariffsButton") Облачные решения
+              button(class=`${bemBlock}button` id="boxTariffsButton") Коробочные решения
+            div(class=`${bemBlock}select-container`)
+              div(class=`${bemBlock}select`)
+                span(class=`${bemBlock}option` id="cloud-option") Облачные решения
+              span(class=`${bemBlock}option` id="box-option") Коробочные решения
+            h3(class=`${bemBlock}sub-title`) Цена за месяц при покупке на год:
+            div(class=`${bemBlock}cards-container`)
+              div(class=`${bemBlock}cards cloud-tariffs`)
+                -i = 0
+                -cards = [['Базовый', '2 490 ₽', '-20%', '1 990 ₽', ['5 пользователей', '24 Гб']], ['Стандартный', '6 990 ₽', '-20%', '5 990 ₽', ['50 пользователей', '100 Гб']], ['Профессиональный', '13 990 ₽', '-20%', '11 190 ₽', ['100 пользователей', '1024 Гб']], ['Энтерпрайз', '33 990 ₽', '-20%', '27 190 ₽', ['250 пользователей', '3 Тб']]]
+                each card in cards
+                  if i === cards.length - 1
+                    -modifier = ` enterprise`
+                  else
+                    -modifier = ``
+                  div(class=`${bemBlock}card tariffs-card${modifier}`)
+                    -newBlock = 'tariffs-card__'
+                      h4(class=`${newBlock}title`)= card[0]
+                      div(class=`${newBlock}price`)
+                        div(class=`${newBlock}old-price`)= card[1]
+                        div(class=`${newBlock}discaunt discaunt`)= card[2]
+                        div(class=`${newBlock}new-price`)= card[3]
+                      ul(class=`${newBlock}list`)
+                        each item in card[4]
+                          li(class=`${newBlock}item tariffs-item`)= item
+                    button(class=`${newBlock}button` data-tariff = `cloud${i + 1}` onclick="showTariff(this);") Подробнее о тарифе
+                  -i++
+              div(class=`${bemBlock}cards box-tariffs`)
+                -i = 0
+                -options = ['12 пользователей', 'Экстарнет', 'ECommerce-платформа', 'Документы онлайн', 'Многодепартаментность', 'Веб-кластер', 'VIP поддержка 24/7']
+                -cards = [['Интернет-магазин + CRM', '109 000 ₽', ], ['Корпоративный портал', 'от 159 000 ₽'], ['Энтерпрайз', 'от 1 299 000 ₽']]
+                each card in cards
+                  if i === cards.length - 1
+                    -modifier = ` enterprise`
+                  else
+                    -modifier = ``
+                  div(class=`${bemBlock}card tariffs-card${modifier}`)
+                    -newBlock = 'tariffs-card__'
+                    div(class=`${bemBlock}descr`)
+                      h4(class=`${newBlock}title`)= card[0]
+                      div(class=`${newBlock}price`)
+                        div(class=`${newBlock}new-price`)= card[1]
+                      ul(class=`${newBlock}list`)
+                        -ii = 0
+                        each item in options
+                          if i === 0 && ii > 1 || i === 1 && ii > 3
+                            li(class=`${newBlock}item tariffs-item tariffs-item-off`)= item
+                          else
+                            li(class=`${newBlock}item tariffs-item`)= item
+                          -ii++
+                    if i === 1
+                      button(class=`${newBlock}button` data-tariff = `box1` onclick="showTariff(this);") Подробнее о тарифе
+                    button(class=`${newBlock}button buy-button`) Обсудить покупку лицензии
+                  -i++
+            div(class=`${bemBlock}info`) Цены указаны за всю компанию, а не за отдельных пользователей
+            div(class=`${bemBlock}slider`)
+              button(class=`${bemBlock}slider-button` id="tariffs-left-arrow")
+                +img(`${bemBlock}slider-arrow`, `portfolio/left-arrow.svg`)
+              button(class=`${bemBlock}slider-button` id="tariffs-right-arrow")
+                +img(`${bemBlock}slider-arrow`, `portfolio/right-arrow.svg`)
+          -bemBlock = `${sectionName}__`
+        -popupTitles = ['Базовый тариф', 'Стандартный тариф', 'Профессиональный тариф', 'Энтерпрайз']
+        -titles = ['13', '16', '19', '25']
+        div(class=`main__popup-container popup-container`)
+          -for(i = 0; i < 4; i++){
+            div(class=`main__popup popup` id=`cloud${i + 1}`)
+              -newBlock = "popup__"
+              div(class=`${newBlock}header`)
+                div(class=`${newBlock}top-title`)= popupTitles[i]
+                button(class=`${newBlock}closer popup-closer`)
+                  img(class=`${newBlock}closer-img` src=`assets/img/closer.svg`)
+              div(class=`${newBlock}title`)= `Все доступные функции (${titles[i]} шт)`
+              if i === 0
+                -options = ['Совместная работа', 'Чат', 'Видеозвонки HD', 'Календарь', 'Диск', 'Новости', 'База знаний', 'Задачи и проекты', 'CRM', 'Контакт-центр', 'Сайты', 'Интернет-магазин', 'Поддержка']
+              else if i === 1
+                -options = ['Совместная работа', 'Чат', 'Видеозвонки HD', 'Календарь', 'Диск', 'Новости', 'База знаний', 'Задачи и проекты', 'CRM', 'Контакт-центр', 'Сайты', 'Интернет-магазин', 'Поддержка', 'Маркетинг', 'Документы Онлайн', 'Администрирование']
+              else if i === 2
+                -options = ['Совместная работа', 'Чат', 'Видеозвонки HD', 'Календарь', 'Диск', 'Новости', 'База знаний', 'Задачи и проекты', 'CRM', 'Контакт-центр', 'Сайты', 'Интернет-магазин', 'Поддержка', 'Маркетинг', 'Документы Онлайн', 'Администрирование', 'Сквозная аналитика', 'Автоматизация бизнеса', 'HR']
+              else if i === 3
+                -options = ['Совместная работа', 'Чат', 'Видеозвонки HD', 'Календарь', 'Диск', 'Новости', 'База знаний', 'Задачи и проекты', 'CRM', 'Контакт-центр', 'Сайты', 'Интернет-магазин', 'Поддержка', 'Маркетинг', 'Документы Онлайн', 'Администрирование', 'Сквозная аналитика', 'Автоматизация бизнеса', 'HR', 'Филиалы', 'Энтерпрайз-кластер', 'Энтерпрайз-пакет']
+              ul(class=`${newBlock}list`)
+                -ii=0
+                each item in options
+                  if ii < 13
+                    li(class=`${newBlock}item tariffs-item`)= item
+                  else
+                    li(class=`${newBlock}item tariffs-item extra-tariffs-item`)= item
+                  -ii++
+              if i === 0
+                div(class=`${newBlock}month-plan`)
+                  div(class=`${newBlock}price-descr`) Цена при покупке на месяц
+                  div(class=`${newBlock}price price`) 2 490 ₽/месяц
+                div(class=`${newBlock}year-plan`)
+                  div(class=`${newBlock}price-descr`) Цена при покупке на год
+                  div(class=`${newBlock}discaunt discaunt`) -20%
+                  div(class=`${newBlock}price price`) 1 990 ₽/месяц
+                  div(class=`${newBlock}old-price`) 2 490 ₽/мес.
+              if i === 1
+                div(class=`${newBlock}month-plan`)
+                  div(class=`${newBlock}price-descr`) Цена при покупке на месяц
+                  div(class=`${newBlock}price price`) 6 990 ₽/месяц
+                div(class=`${newBlock}year-plan`)
+                  div(class=`${newBlock}price-descr`) Цена при покупке на год
+                  div(class=`${newBlock}discaunt discaunt`) -20%
+                  div(class=`${newBlock}price price`) 5 590 ₽/месяц
+                  div(class=`${newBlock}old-price`) 6 990 ₽/месяц
+              if i === 2
+                div(class=`${newBlock}month-plan`)
+                  div(class=`${newBlock}price-descr`) Цена при покупке на месяц
+                  div(class=`${newBlock}price price`) 13 990 ₽/месяц
+                div(class=`${newBlock}year-plan`)
+                  div(class=`${newBlock}price-descr`) Цена при покупке на год
+                  div(class=`${newBlock}discaunt discaunt`) -20%
+                  div(class=`${newBlock}price price`) 11 190 ₽/месяц
+                  div(class=`${newBlock}old-price`) 13 990 ₽/месяц
+              if i === 3
+                div(class=`${newBlock}price-descr`) Цена при покупке на месяц
+                ul(class=`${newBlock}users-blocks`)
+                  li(class=`${newBlock}users users`)
+                    span(class=`users__count`) 250 чел. -
+                    span(class=`users__price price`) 33 990 ₽/мес
+                  li(class=`${newBlock}users users`)
+                    span(class=`users__count`) 500 чел. -
+                    span(class=`users__price price`) 59 990 ₽/мес
+                  li(class=`${newBlock}users users`)
+                    span(class=`users__count`) 1000 чел. -
+                    span(class=`users__price price`) 99 990 ₽/мес
+                div(class=`${newBlock}header`)
+                  div(class=`${newBlock}price-descr`) Цена при покупке на год
+                  div(class=`${newBlock}discaunt discaunt`) -20%
+                ul(class=`${newBlock}users-blocks`)
+                  li(class=`${newBlock}users users`)
+                    span(class=`users__count`) 250 чел. -
+                    span(class=`users__price price`) 27 190 ₽/мес
+                    span(class=`users__old-price`) 33 990 ₽/мес.
+                  li(class=`${newBlock}users users`)
+                    span(class=`users__count`) 500 чел. -
+                    span(class=`users__price price`) 47 990 ₽/мес
+                    span(class=`users__old-price`) 59 990 ₽/мес.
+                  li(class=`${newBlock}users users`)
+                    span(class=`users__count`) 1000 чел. -
+                    span(class=`users__price price`) 79 990 ₽/мес
+                    span(class=`users__old-price`) 99 990 ₽/мес.
+              button(class=`${newBlock}button buy-button`) Обсудить покупку лицензии
+          -}
+          div(class=`main__popup popup box-popup` id=`box1`)
+            -newBlock = "popup__"
+            div(class=`${newBlock}header`)
+              div(class=`${newBlock}top-title`) Корпоративный портал
+              button(class=`${newBlock}closer popup-closer`)
+                img(class=`${newBlock}closer-img` src=`assets/img/closer.svg`)
+            div(class=`${newBlock}title`) Цена за кол-во пользователей
+            ul(class=`${newBlock}users-blocks`)
+              li(class=`${newBlock}users users`)
+                span(class=`users__count`) 50 человек -
+                span(class=`users__price price`) 159 000 ₽
+              li(class=`${newBlock}users users`)
+                span(class=`users__count`) 100 человек -
+                span(class=`users__price price`) 229 000 ₽
+              li(class=`${newBlock}users users`)
+                span(class=`users__count`) 250 человек -
+                span(class=`users__price price`) 349 000 ₽
+              li(class=`${newBlock}users users`)
+                span(class=`users__count`) 500 человек -
+                span(class=`users__price price`) 599 000 ₽
+            button(class=`${newBlock}button buy-button`) Обсудить покупку лицензии
+        -sectionName= 'reviews'
+        -bemBlock = `${sectionName}__`
+        section(class='main__' + `${sectionName} ${sectionName}`)
+          div(class=`${bemBlock}container`).container
+            h2(class=`${bemBlock}title`) Отзывы
+        -sectionName= 'portfolio'
+        -bemBlock = `${sectionName}__`
+        section(class='main__' + `${sectionName} ${sectionName}`)
+          div(class=`${bemBlock}container`).container
+            h2(class=`${bemBlock}title`) Кейсы
+            div(class=`${bemBlock}cards`)
+              div(class=`${bemBlock}slider`)
+                button(class=`${bemBlock}slider-button` id="left-arrow")
+                  +img(`${bemBlock}slider-arrow`, `${sectionName}/left-arrow.svg`)
+                button(class=`${bemBlock}slider-button` id="right-arrow")
+                  +img(`${bemBlock}slider-arrow`, `${sectionName}/right-arrow.svg`)
+              div(class=`${bemBlock}cards-wrapper`)
+                div(class=`${bemBlock}cards-container`)
+                  -i = 1
+                  each card in [['Строительство', 'Кастомные настройки для клиента', 'Повышение эффективности управления проектами на 25%, сокращение времени на согласование документов на 40%, улучшение контроля за бюджетами и сроками.'], ['Логистика', 'Внедрение Битрикс24 под ключ', 'Улучшение контроля над заказами, сокращение времени обработки заявок на 30%, а также повышение общей производительности компании.'], ['Маркетинг', 'Кастомные настройки для клиента', 'Сокращение времени на выполнение задач на 25%, повышение точности отчетов и улучшение взаимодействия внутри команды.'], ['Маркетинг', 'Кастомные настройки для клиента', 'Сокращение времени на выполнение задач на 25%, повышение точности отчетов и улучшение взаимодействия внутри команды.'], ['Строительство', 'Кастомные настройки для клиента', 'Повышение эффективности управления проектами на 25%, сокращение времени на согласование документов на 40%, улучшение контроля за бюджетами и сроками.']]
+                    div(class=`${bemBlock}card portfolio-card-wrapper`)
+                      div(class=`${bemBlock}card portfolio-card`)
+                        div(class=`${bemBlock}card portfolio-card-front`)
+                          if i === 5
+                            +img(`portfolio-card__img`, `${sectionName}/1.png`)
+                          else
+                            +img(`portfolio-card__img`, `${sectionName}/${i}.png`)
+                          div(class=`portfolio-card__descr`)
+                            div(class=`portfolio-card__top-title`)= card[0]
+                            div(class=`portfolio-card__title`)= card[1]
+                            div(class=`portfolio-card__result`)
+                              span(class=`portfolio-card__result-decor`)
+                              span(class=`portfolio-card__result-txt`) Результат
+                            div(class=`portfolio-card__txt`)= card[2]
+                        div(class=`${bemBlock}card portfolio-card-back`)
+                          if i !== 1
+                            div(class=`portfolio-card__result`)
+                              span(class=`portfolio-card__result-decor`)
+                              span(class=`portfolio-card__result-txt`) Результат
+                            div Клиенту требовалось улучшить управление проектами и ресурсами, а также повысить прозрачность выполнения задач и отчетности.
+                            div(class=`portfolio-card__result`)
+                              span(class=`portfolio-card__result-decor`)
+                              span(class=`portfolio-card__result-txt`) Решение
+                            ul
+                              li Настройка CRM: Адаптация CRM-системы под специфику строительных проектов, включая ведение клиентских баз, управление договорами и отслеживание платежей.
+                              li Автоматизация бизнес-процессов: Внедрение автоматических процессов для согласования документов и контроля этапов строительства.
+                              li Интеграция с бухгалтерскими системами: Упрощение финансовой отчетности и контроль бюджетов.
+                              li Настройка отчетности: Создание индивидуальных шаблонов отчетов по проектам и ресурсам.
+                          else
+                            div(class=`portfolio-card__result`)
+                              span(class=`portfolio-card__result-decor`)
+                              span(class=`portfolio-card__result-txt`) Результат
+                            div Компания нуждалась в улучшении управления проектами, координации команды и автоматизации отчетности.
+                            div(class=`portfolio-card__result`)
+                              span(class=`portfolio-card__result-decor`)
+                              span(class=`portfolio-card__result-txt`) Решение
+                              div Были внедрены следующие кастомные настройки: 
+                            ol
+                              li Настройка CRM: Разработка уникальных полей и воронок продаж для более точного отслеживания клиентов и проектов. 
+                              li Автоматизация бизнес-процессов: Настроены автоматические уведомления и задания для команды, что снизило количество ошибок и улучшило сроки выполнения задач. 
+                              li Интеграция с другими системами: Интеграция Битрикс24 с используемыми ранее инструментами для маркетинговых кампаний, что обеспечило бесшовный обмен данными.
+                    -i++
+        -sectionName= 'comment'
+        -bemBlock = `${sectionName}__`
+        section(class='main__' + `${sectionName} ${sectionName}`)
+          div(class=`${bemBlock}container`).container
+            h2(class=`${bemBlock}title`) Отзывы
+        -sectionName= 'request'
+        -bemBlock = `${sectionName}__`
+        section(class='main__' + `${sectionName} ${sectionName}`)
+          div(class=`${bemBlock}container`).container
+            div(class=`${bemBlock}info`)
+              h2(class=`${bemBlock}title`) Заказать консультацию
+              div(class=`${bemBlock}txt`) Поможем определиться с необходимыми функциями Битрикс24 для вашего бизнеса и рассчитаем стоимость внедрения.
+              div(class=`${bemBlock}imgs`)
+                each img in ['1', '2', '3', '4']
+                  +img(`${bemBlock}img`, `${sectionName}/${img}.jpg`)
+            div(class=`${bemBlock}form-container`)
+              form(class=`${bemBlock}form form` action="#")
+                -newBlock = "form__"
+                input(class=`${newBlock}input` type="text" placeholder="Ваше имя *")
+                input(class=`${newBlock}input` type="tel" placeholder="Ваш телефон *")
+                div(class=`${newBlock}input big-input`)
+                  textarea(placeholder="Запрос")
+                button(class=`${newBlock}button`) Оставить заявку
+                div(class=`${newBlock}warning`)
+                  label(class=`${newBlock}label`)
+                    input(class=`${newBlock}checkbox` type="checkbox")
+                    span.custom-checkbox
+                  span(class=`${newBlock}alert`) Нажимая на кнопку "Отправить", я даю
+                  a(class=`${newBlock}link` href="#") согласие на обработку персональных данных.
       include footer.pug

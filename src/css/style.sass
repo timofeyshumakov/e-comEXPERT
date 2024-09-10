@@ -9,7 +9,7 @@
   src: local("Montserrat-Bold")
   src: url("../fonts/Montserrat-Bold.woff2") format("woff2")
   src: url("../fonts/Montserrat-Bold.woff") format("woff")
-  src: url("../fonts/Montserrat-Bold.woff") format("truetype")
+  src: url("../fonts/Montserrat-Bold.ttf") format("truetype")
 
 @font-face
   font-style: extrabold
@@ -19,7 +19,7 @@
   src: local("Montserrat-ExtraBold"),
   src: url("../fonts/Montserrat-ExtraBold.woff2") format("woff2"),
   src: url("../fonts/Montserrat-ExtraBold.woff") format("woff"),
-  src: url("../fonts/Montserrat-ExtraBold.woff") format("truetype")
+  src: url("../fonts/Montserrat-ExtraBold.ttf") format("truetype")
 
 @font-face
   font-style: semibold
@@ -29,7 +29,7 @@
   src: local("Montserrat-SemiBold"),
   src: url("../fonts/Montserrat-SemiBold.woff2") format("woff2"),
   src: url("../fonts/Montserrat-SemiBold.woff") format("woff"),
-  src: url("../fonts/Montserrat-SemiBold.woff") format("truetype")
+  src: url("../fonts/Montserrat-SemiBold.ttf") format("truetype")
 
 @font-face
   font-style: regular
@@ -39,7 +39,7 @@
   src: local("Montserrat-Regular"),
   src: url("../fonts/Montserrat-Regular.woff2") format("woff2"),
   src: url("../fonts/Montserrat-Regular.woff") format("woff"),
-  src: url("../fonts/Montserrat-Regular.woff") format("truetype")
+  src: url("../fonts/Montserrat-Regular.ttf") format("truetype")
 
 @font-face
   font-style: light
@@ -49,7 +49,7 @@
   src: local("Montserrat-Light"),
   src: url("../fonts/Montserrat-Light.woff2") format("woff2"),
   src: url("../fonts/Montserrat-Light.woff") format("woff"),
-  src: url("../fonts/Montserrat-Light.woff") format("truetype")
+  src: url("../fonts/Montserrat-Light.ttf") format("truetype")
 
 @font-face
   font-style: medium
@@ -59,7 +59,7 @@
   src: local("Montserrat-Medium"),
   src: url("../fonts/Montserrat-Medium.woff2") format("woff2"),
   src: url("../fonts/Montserrat-Medium.woff") format("woff"),
-  src: url("../fonts/Montserrat-Medium.woff") format("truetype")
+  src: url("../fonts/Montserrat-Medium.ttf") format("truetype")
 
 @keyframes spin
   0%
@@ -74,20 +74,16 @@
     width: 100%
 
 /*#scrollbar*/
-body::-webkit-scrollbar-track
-  background-color: $blue
+.portfolio__cards-wrapper::-webkit-scrollbar-track
+  background-color: $white
 
-body::-webkit-scrollbar-thumb
+.portfolio__cards-wrapper::-webkit-scrollbar-thumb
   border-radius: 0.5rem
-  background-color: $white
+  background-color: $black
 
-body::-webkit-scrollbar-thumb:active
+.portfolio__cards-wrapper::-webkit-scrollbar
+  height: 0
   background-color: $white
-  border: 0.1rem solid $blue
-
-body::-webkit-scrollbar
-  width: 0.6rem
-  background-color: $blue
 
 /*#common*/
 body
@@ -97,19 +93,33 @@ body
   background: $white
   overflow-x: hidden
 
+img
+  pointer-events: none
+  
 .wrapper
-  max-width: 1440px
   margin: 0 auto
+  width: 99.9vw
+  overflow: hidden
+
+section:not(.info), footer
+  opacity: 0
+  transform: translateY(10rem)
+  transition: opacity 0.3s ease, transform 0.3s ease
+
+section.visible, footer.visible
+  opacity: 1
+  transform: translateY(0)
 
 .container
   display: flex
   flex-direction: column
-  padding: 0 4.375rem
+  padding: 0 min(4.375rem, 5vw)
   margin: 0 auto
   box-sizing: content-box
   max-width: 81.25rem
   justify-content: space-between
   align-items: center
+  gap: 3rem
 
 a
   color: $black
@@ -117,25 +127,67 @@ a
 
 h2
   font-weight: 700
-  font-size: 1.66rem
+  font-size: 1.92rem
+  line-height: 1.25
 
+.show
+  display: flex !important
+
+.hide
+  display: none !important
+
+form
+  display: flex
+  align-items: center
+  justify-content: center
+
+button:hover
+  transform: scale(1.05)
+  transition: 0.3s
+  
 .header
-  padding: 1rem 0
+  padding: 1rem 0 0.7rem
   background: $white
+
+.popup
+  display: none
+  position: relative
+  flex-direction: column
+  background: $white
+  border-radius: 10px 
+  transition: 0.4s
+  transform: translateY(-200%)
+
+.popup-container::-webkit-scrollbar
+  width: 0
 
 .header__
 
   &container
     flex-direction: row
-  
+    text-wrap: nowrap
+    gap: 0.5rem
+    width: 90%
+
   &left
     display: flex
     align-items: center
     gap: 0.5rem
+    z-index: 1
+
+  &right
+    display: none
+    gap: 1rem
+
+  &burger
+    display: none
+    width: 3rem
+    height: 2.5rem
+    z-index: 1
 
   &menu
     display: flex
-    gap: 3rem
+    gap: min(1.7vw, 1.7rem)
     align-items: center
 
   &logo
@@ -150,29 +202,301 @@ h2
   &button
     border: 1px solid $black
     border-radius: 2px
-    padding: 0.75rem 3.9rem
+    padding: 0.5rem min(3.2rem, 4vw)
+    font-size: 1.15rem
 
+  &popup
+    padding: 4rem 5rem
+    max-width: 696px
+
+.popup-container
+  padding: 1rem
+  display: none
+  width: 100vw
+  height: 100vh
+  position: fixed
+  top: 0
+  left: 0
+  align-items: center
+  justify-content: center
+  background: rgba(0, 0, 0, 0.65)
+  z-index: 20
+  overflow-y: scroll
+
+.popup__
+
+  &closer
+    position: absolute
+    top: 1rem
+    right: 1rem
+
+  &title
+    font-weight: 600
+    font-size: 24px
+    text-align: center
+    color: #000
+    margin: 1.25rem
+    margin-top: 0
+
+  &title p
+    font-size: 20px
+
+  &list
+    margin-top: 1rem
+    display: flex
+    flex-direction: column
+    gap: 0.6rem
+
+  &item
+    line-height: 1.25
+
+  &users-blocks
+    display: flex
+    flex-direction: column
+    gap: 10px
+
+.main__popup
+  padding: 1.5rem 1rem
+  gap: 1rem
+  width: 453px
+
+.price
+  font-weight: 700
+  font-size: 20px
+  color: #c14646
+
+.users
+  display: flex
+  gap: 0.5rem
+  align-items: center
+
+#cloud4 .popup__header
+  display: flex
+  gap: 2.5rem
+  align-items: center
+  margin-top: 1.5rem
+
+#cloud4 .popup__price-descr
+  margin-top: 0.5rem
+
+.box-popup .popup__users-blocks
+  margin-top: 1rem
+
+.box-tariffs .tariffs-card__list
+  margin: 1.5rem 0 4rem
+  gap: 1.2rem
+
+.box-tariffs .tariffs-card
+  padding-top: 1rem
+  padding-bottom: 2rem
+
+.box-tariffs .tariffs-card__new-price
+  font-size: 2rem
+
+.main__popup 
+
+  & .popup__closer-img
+    width: 1.5rem
+    height: 1.5rem
+
+  & .popup__title
+    margin: 0
+    font-size: 1.25rem
+    color: $red
+    text-align: start
+
+  & .popup__top-title
+    font-weight: 700
+    font-size: 16px
+    color: #acacac
+
+  & .popup__price-descr
+    font-weight: 700
+    font-size: 16px
+    color: #acacac
+
+  & .popup__month-plan
+    display: flex
+    flex-direction: column
+    gap: 1rem
+
+  & .popup__year-plan
+    display: grid
+    grid-template-columns: 1.6fr 1fr
+    column-gap: 2rem
+    row-gap: 1rem
+
+  & .popup__discaunt
+    justify-self: self-start
+    bottom: 0
+    left: 0
+
+  & .popup__old-price
+    position: relative
+    left: -4rem
+    top: 0.3rem
+    text-decoration: line-through
+    color: #999
+
+  & .popup__button
+    border: 1px solid #c14646
+    border-radius: 10px
+    padding: 10px
+    max-width: 340px
+    width: 100%
+    color: #333
+    align-self: center
+    margin: 2rem 0 1rem 0
+    
 .menu__
 
   &list
     display: flex
     align-items: center
-    gap: 3rem
+    gap: min(1.9vw, 1.9rem)
+
+  &item
+    position: relative
+    font-weight: 500
+
+  &link
+    font-size: 1rem
+
+.menu__summary
+  cursor: pointer
+  display: inherit
+  list-style-position: inside
+  list-style-type: none
+  content: ""
+  color: #333333
+
+.menu__details[open]
+  position: absolute
+  top: -0.7rem
+  left: 0
+  background: white
+  z-index: 2
+  width: fit-content
+  padding: 1rem
+  padding-top: 0
+  white-space: nowrap
+
+.menu__summary-link
+    display: block
+    margin-top: 1rem
+    color: #949494
+    position: relative
+
+.burger-active
+  width: 100vw
+  height: 100vh
+  position: fixed
+  z-index: 20
+  padding: 0
+  overflow-y: scroll
+
+.burger-active
+
+  & .header__container
+    width: fit-content
+    flex-direction: column
+    align-items: flex-start
+    justify-content: flex-start
+    padding: 2.5rem
+    margin: 0
+    gap: 3.5rem
+
+  & .menu__list
+    flex-direction: column
+    align-items: flex-start
+    gap: 1.25rem
+    line-height: 1.2
+
+  & .menu__link
+    font-size: 1.25rem
+
+  & .header__menu 
+    align-items: flex-start
+
+  & .header__button
+    width: 332px
+    border: 1px solid $red
+    color: $red
+    border-radius: 5px
+
+  & .header__burger
+    display: flex
+    position: absolute
+    right: 2.25rem
+    top: 2.25rem
+
+  & .header__tel
+      font-weight: 600
+      font-size: 20px
+      color: $red
+      display: block
+
+  & .accordion.active .accordion__content
+    position: relative
+    top: 0
+    left: 0
+    padding: 0
+    padding-top: 1rem
+
+.accordion-header
+  cursor: pointer
+  position: relative
+
+.accordion.active
+  position: relative
+
+.accordion__content
+  position: absolute
+  display: none
+  transition: max-height 0.2s ease-out
+  background: #fff
+  width: 300px
+
+
+.accordion.active .accordion__content
+  top: 1rem
+  left: -1rem
+  display: flex
+  flex-direction:  column
+  gap: 1rem
+  padding: 1rem
+
+.accordion__link
+  color: #949494
+  display: block
+  text-wrap: wrap
+
+.accordion__link:hover
+  color: $black
+
+.accordion.active .accordion-header
+  width: 90%
+  text-decoration-skip-ink: none
+  color: #c14646
+  border-bottom: 2px $red solid
+  z-index: 1
 
 .info
+  background-image: url(../img/info/bg.jpg)
+  background-position: center
+  background-size: cover
   color: $white
 
 .info__
 
   &container
     min-height: 20rem
-    padding-top: 2rem
-    padding-bottom: 2rem
+    padding: 2.5rem
     justify-content: center
     gap: 1.5rem
 
   &title
-    font: 600 2.72rem /1 $ff
+    font: 600 2.5rem /1 $ff
 
   &subtitle
     display: flex
@@ -186,20 +510,183 @@ h2
 
   &subtitle-txt
     font-weight: 600
-    font-size: 1.66rem
+    font-size: 1.5rem
     color: $white
 
   &txt
+    text-align: center
     font-weight: 500
-    font-size: 1.17rem
+    font-size: 1rem
+    margin: 0 3rem
 
-  &bg
+.capabilities
+  padding: 5.5rem 0 8rem 0
+
+.capabilities__
+
+  &body
+    background: $red
+    color: $white
+    width: 100%
+    display: grid
+    grid-template-columns: 1rem 1fr 1.05fr
+    gap: 2.5rem
+    align-items: flex-start
+    justify-content: space-between
+    padding: 4.2rem 2.2rem 1rem
+    border-radius: 1rem
+
+  &decor
+    height: 88%
+
+  &list
+    display: flex
+    flex-direction: column
+    gap: 1.2rem
+    word-break: break-word
+    margin-top: 1.5rem
+
+  &item
+    font-weight: 500
+    font-size: 1.25rem
+    text-transform: uppercase
+    color: rgba(255, 255, 255, 0.65)
+    cursor: pointer
+    line-height: 1.2
+
+  &item:hover
+    transform: scale(1.02)
+
+  &deocor
+    align-self: start
+
+  &card
+    display: flex
+    flex-direction: column
+    gap: 1.5rem
+    transform: translateY(200%)
+    transition: 0.5s
     position: absolute
-    z-index: -1
-    top: 0
-    height: 28.5rem
-    width: 100vw
-    max-width: 1440px
+
+  &cards
+    position: relative
+    overflow: hidden
+
+  &card-img
+    width: 100%
+    border-radius: 10px
+
+  &card:nth-child(1)
+    position: static
+    display: flex
+    transform: translateY(0)
+
+  &card-txt
+    min-height: 5em
+    margin-right: 1rem
+    font-weight: 500
+    font-size: 1rem
+    color: #fff
+    line-height: 1.25
+
+.active-capability
+  font-weight: 800
+  font-size: 20px
+  text-transform: uppercase
+  color: #fff
+
+.services
+  padding: 3.3rem 0 3.6rem
+  background-image: url(../img/services/bg.jpg)
+
+.services__
+
+  &title
+    text-align: center
+    color: #333
+
+  &cards
+    grid-template-columns: repeat(3, 1fr)
+    display: grid
+    width: 100%
+    gap: 2.5rem
+
+.services-card.show
+  box-shadow: 0 6px 0 0 $red
+
+.services-card
+  box-shadow: 0 6px 0 0 rgba(0, 0, 0, 0.25)
+  background: #fff
+  border-radius: 10px
+  cursor: pointer
+  min-height: 11rem
+
+.mark-item
+  position: relative
+  left: 1rem
+  width: 95%
+  line-height: 1.25
+
+.portfolio-card__result-descr
+  font-size: 0.9rem
+
+.mark-item:before
+    content: "."
+    display: block
+    position: absolute
+    top: -0.25em
+    left: -0.75rem
+    background-size: contain
+    background-repeat: no-repeat
+
+.services-card:active
+  transition: 0.5s
+  box-shadow: none
+
+.services-card-back
+  align-items: center
+  display: none
+  padding: 1rem
+  height: 100%
+
+.services-card-front
+  gap: 2rem
+  display: flex
+  flex-direction: column
+  padding: 1rem
+  padding-bottom: 2.1rem
+
+.services-card__
+  
+  &img
+    width: 3.5rem
+    height: 3.5rem
+
+  &txt
+    font-weight: 700
+    color: #333
+    line-height: 1.3
+    font-size: 19.5px
+    margin-right: 3rem
+
+.services-card
+
+  ul li
+    position: relative
+    left: 1.5rem
+    width: 95%
+    line-height: 1.27
+    font-size: 0.99rem
+
+  ul li:before
+    content: "."
+    display: block
+    position: absolute
+    top: -0.25em
+    left: -0.75rem
+    background-size: contain
+    background-repeat: no-repeat
+
 
 .consultation
   padding: 5.5rem 4.375rem
@@ -207,14 +694,19 @@ h2
 .consultation__
 
   &container
-    background-image: url(../img/consultation/bg.jpg)
+    background-image: url(../img/consultation/bg.png)
     min-height: 236px
     background-size: cover
     border-radius: 0.5rem
     background-repeat: no-repeat
     color: $white
-    gap: 2rem
+    gap: 1.6rem
     justify-content: center
+    max-width: 72.5rem
+
+  &title
+    text-align: center
+    font-size: 1.47rem
 
   &button
     color: $red
@@ -224,24 +716,604 @@ h2
     font-size: 1.15rem
     font-weight: 500
 
-.footer
-  padding: 1rem 0
+.tariffs
+  padding-bottom: 3rem
 
-.footer__
+.tariffs__
 
   &container
     gap: 2rem
 
-  &nav
+  &buttons
     display: flex
+    white-space: nowrap
+    
+  &button
+    font-weight: 700
+    font-size: 17.7px
+    background: #fff
+    color: $red
+    padding: 0.75rem 1.5rem
+    border: 1px solid #c14646
+    border-radius: 0 10px 10px 0
+    padding: 10px
+
+  &button:nth-child(1)
+    border-radius: 10px 0 0 10px
+
+  &select
+    display: none
+    background-size: 0.85rem 1rem
+    background-image: url(../img/select.svg)
+    background-repeat: no-repeat, repeat
+    background-position: right 1em top 50%, 0 0
+    background-color: $red
+    color: $white
+    appearance: none
+    padding: 10px
+    border-radius: 10px
+    font-size: 0.97rem
+    width: 100%
+    max-width: 320px
+
+  &select-container
+    display: flex
+    flex-direction: column
+    align-items: center
+
+  &select-container .tariffs__option:not(:first-child)
+    display: none
+
+  &descr
+    display: flex
+    flex-direction: column
+    gap: 1rem
+
+  &select option
+    background: $white
+    color: $red
+
+  &sub-title
+    margin-left: 2.3rem
+    font-weight: 600
+    font-size: 1.5rem
+    text-align: center
+    color: #333
+
+  &cards-container
+    position: relative
+    width: 102.5%
+
+  &cards-container::-webkit-scrollbar
+    height: 0
+
+  &cards
+    padding: 0.6rem
+    display: flex
+    gap: 1.85rem
+    width: 100%
+    justify-content: space-between
+    transition: 0.5s
+
+  &info
+    font-weight: 500
+    font-size: 0.85rem
+    text-decoration: underline
+    text-decoration-skip-ink: none
+    color: #333
+
+.tariffs__slider
+  display: none
+
+.box-tariffs
+  display: none
+  position: absolute
+  top: 0
+  transform: translateX(100%)
+
+.active-button
+  background: $red
+  color: $white
+
+.tariffs-card
+  padding: 2rem
+  border-radius: 10px
+  box-shadow: -1px 4px 12px 0 rgba(0, 0, 0, 0.1)
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  gap: 1.5rem
+  width: 100%
+  font-size: 1rem
+
+.tariffs-card.enterprise
+  background: $red
+  color: $white
+
+.enterprise .tariffs-card__
+
+  &title
+    color: $white
+
+  &old-price
+    color: rgba(255, 255, 255, 0.58)
+
+  &new-price
+    color: $white
+
+  &button
+    background: $white
+    color: $red
+
+.tariffs-card__
+
+  &title
+    font-weight: 700
+    font-size: 20px
+    color: #333
+    word-break: break-word
+
+  &price
+    display: grid
+    grid-template-columns: 2fr 1fr
+
+  &old-price
+    font-weight: 400
+    text-decoration: line-through
+    color: #999
+
+  &new-price
+    font-weight: 700
+    font-size: 36px
+    color: $red
+    white-space: nowrap
+
+  &button
+    border: 1px solid $red
+    border-radius: 10px
+    padding: 10px
+    width: 100%
+    font-weight: 400
+    font-size: 1rem
+    color: #333
+    align-self: center
+
+  &list
+    display: flex
+    flex-direction: column
+    gap: 1.25rem
+    margin: 0.75rem 0 2rem 0
+
+.enterprise .tariffs-item::before
+  background-image: url(../img/tariffs/checked-white.svg)
+
+.tariffs-item
+  position: relative
+  left: 2rem
+
+.tariffs-item-off
+  text-decoration: line-through
+  color: #999
+
+.tariffs-item::before
+    content: ""
+    display: block
+    position: absolute
+    left: -2rem
+    top: 50%
+    transform: translateY(-50%)
+    width: 20px
+    height: 20px
+    background-image: url(../img/tariffs/checked.svg)
+    background-size: contain
+    background-repeat: no-repeat
+
+.tariffs-item-off::before
+  background-image: url(../img/tariffs/cross.svg)
+
+.extra-tariffs-item
+  color: $red
+
+.extra-tariffs-item::before
+  background-image: url(../img/tariffs/plus.svg)
+
+.discaunt
+    border-radius: 10px
+    padding: 5px 12px
+    background: #ffc226
+    font-weight: 700
+    color: #333
+    width: fit-content
+    justify-self: end
+    position: relative
+    bottom: -0.5rem
+    left: 0.3rem
+
+.users__old-price
+  color: #999999
+  text-decoration: line-through
+
+.reviews
+  padding: 3rem 0 5rem 0
+
+.portfolio
+  padding: 2.3rem 0 3rem 0
+  background: $gray
+
+.portfolio__
+
+  &cards
+    width: 100%
+    position: relative
+
+  &slider
+    display: flex
+    gap: 0.75rem
+    position: absolute
+    right: 0
+    top: -4.5rem
+
+  &slider-button
+    height: 55px
+    width: 55px
+    padding: 0.8rem
+    display: flex
+    align-items: center
+    justify-content: center
+
+  &cards-wrapper
+    overflow: hidden
+    width: 100.5%
+
+  &cards-container
+    display: flex
+    justify-content: space-between
+    transition: 0.3s
+
+.portfolio-card-adaptive
+  padding-right: 0 !important
+
+.portfolio-card-wrapper
+  padding-right: 3.75rem
+  transform: translateX(0%)
+  transition: all 0.5s ease 0s
+  user-select: none
+
+.portfolio-card
+  border-radius: 10px
+  background: $white
+  cursor: pointer
+  height: 100%
+  max-width: 395px
+
+.portfolio-card-front
+  display: flex
+  flex-direction: column
+
+.portfolio-card-back
+  padding: 1rem 2rem
+  padding-right: 1rem
+  display: none
+  overflow: hidden
+  flex-direction: column
+  gap: 0
+  width: 395px
+  font-size: .85rem
+
+.portfolio-card-back
+
+  & div span:nth-child(1)
+    border: 2px solid #c14646
+    width: 27px
+    height: 1px
+    display: inline-block
+    top: -0.45rem
+    position: relative
+    margin-right: 0.75rem
+  
+  & div span:nth-child(2)
+    font-weight: 600
+    font-size: 1rem
+    color: #333
+
+  & div:nth-child(2)
+    line-height: 1.2
+    font-size: 0.87rem
+
+  & ul
+    line-height: 1.2
+    font-size: 0.87rem
+
+  & li
+    position: relative
+    width: 90%
+    line-height: 1.25
+
+  & ul
+    margin-left: 0.5rem
+    margin-top: 0.5rem
+
+  & ul li
+    margin-top: 1rem
+    left: 1rem
+
+  & ul li:before
+    content: "."
+    display: block
+    position: absolute
+    top: -0.25em
+    left: -0.75rem
+    background-size: contain
+    background-repeat: no-repeat
+
+  & ol
+    margin-top: 0.5rem
+    list-style-type: none
+    counter-reset: item
+
+  & ol li
+    margin-top: 1rem
+
+  & ol li::before
+    counter-increment: item
+    content: counter(item) ". "
+    display: inline-block
+    width: 1em
+    text-align: left
+
+  & div
+    margin-top: 0.9rem
+
+
+.portfolio-card__
+
+  &img
+    width: 395px
+    height: 271px
+    border-radius: 10px 10px 0 0
+
+  &descr
+    padding: 1.5rem 1.1rem 2rem 2rem
+    height: 100%
+    display: flex
+    flex-direction: column
+    gap: 1.3rem
+    align-items: center
+
+  &top-title
+    font-weight: 300
+    font-size: 0.85rem
+    color: #999
+
+  &title
+    font-weight: 700
+    font-size: 20px
+    text-align: center
+    color: $red
+    margin: 0 2rem
+    line-height: 1.1
+
+  &result
+    align-self: flex-start
+    position: relative
+
+
+
+  &result-decor
+    border: 2px solid #c14646
+    width: 27px
+    height: 1px
+    display: inline-block
+    top: -0.45rem
+    position: relative
+    margin-right: 0.75rem
+
+  &result-txt
+    font-weight: 600
+    font-size: 1rem
+    color: #333
+
+  &txt
+    height: 100%
+    vertical-align: bottom
+    display: flex
+    align-items: flex-end
+    flex-direction: column
+    line-height: 1.2
+
+.comment
+  padding: 8rem 0 2.5rem
+
+.comment__
+  
+  &title
+    margin-left: -2.7rem
+
+.request
+  padding: 2.5rem 0 3.3rem
+
+.request__
+  
+  &container
+    display: flex
+    flex-direction: row
+    gap: 4.3vw
+    align-items: stretch
+
+  &info
+    padding: 3.2rem 1.5rem
+    width: 100%
+    display: flex
+    flex-direction: column
+    justify-content: flex-start
+    gap: 3.5rem
+    background: $gray
+    border-radius: 1rem
+
+  &txt
+    margin-right: 3rem
+    font-size: 15.6px
+    line-height: 1.3
+
+  &imgs
+    display: flex
+    width: 100%
+    gap: 0.8rem
+    align-items: center
+    flex-wrap: wrap
+
+  &img:first-child
+    width: 106px
+
+  &img:not(:first-child)
+    width: 143px
+
+  &form-container
+    width: 100%
+    display: flex
+    justify-content: start
+
+.form
+  display: flex
+  flex-direction: column
+  gap: 1.5rem
+  max-width: 523px
+  width: 100%
+
+.form__
+
+  &input
+    text-align: start
+    padding: 1.1rem 2rem
+    border: 1px solid #dce4ed
+    border-radius: 4px
+    width: 100%
+    box-shadow: 0 0 5px 0 rgba(28, 32, 38, 0.05)
+    background: #fff
+    font-size: 1.1rem
+    line-height: 1.1
+
+  &button
+    margin-top: -0.6rem
+    margin-left: 0.4rem
+    padding: 1.2rem
+    box-shadow: 0 4px 4px 0 rgba(198, 80, 80, 0.5)
+    background: #eb5757
+    border-radius: 2px
+    font-weight: 600
+    font-size: 20px
+    line-height: 130%
+    text-transform: uppercase
+    text-align: center
+    color: #fff
+    width: 100%
+
+  &label
+    width: $checkbox-size
+    height: $checkbox-size
+    display: inline-block
+
+  &checkbox
+    border-radius: 2px
+    width: $checkbox-size
+    height:$checkbox-size
+    background: $blue
+    display: none
+
+  &checkbox:checked
+    background-color: $blue
+    width: $checkbox-size
+    height: $checkbox-size
+
+  &checkbox:checked + .custom-checkbox::after
+    opacity: 1
+
+  &alert
+    margin-left: 0.5rem
+    font-weight: 700
+    font-size: 1rem
+    color: #333
+
+  &link
+    display: inline-block
+    font-weight: 500
+    font-size: 1rem
+    color: #337ab7
+    margin-top: 0.5rem
+
+.big-input
+  height: 8.81rem
+
+.big-input::placeholder
+  text-align: top
+  transform: translateY(-2.5rem)
+
+.big-input textarea
+  width: 100%
+  height: 100%
+  resize: none
+  font: 500 1.15rem /1 $ff
+
+.big-input textarea::-webkit-scrollbar-track
+  background-color: $white
+
+.big-input textarea::-webkit-scrollbar-thumb
+  border-radius: 0.5rem
+  background-color: $black
+
+.big-input textarea::-webkit-scrollbar
+  width: 0.6rem
+  background-color: $white
+
+.custom-checkbox
+  width: $checkbox-size
+  height: $checkbox-size
+  border: 2px solid $blue
+  border-radius: 4px
+  display: inline-block
+  position: relative
+  cursor: pointer
+
+.custom-checkbox::after
+  border-radius: 4px
+  content: ""
+  width: $checkbox-size
+  height: $checkbox-size
+  background-color: $blue
+  position: absolute
+  top: -2px
+  left: -2px
+  opacity: 0
+  -webkit-transition: opacity 0.2s
+  transition: opacity 0.2s
+
+.footer__
+
+  &container
+    gap: 1.5rem
+
+  &nav
+    width: 100%
+
+  &nav-list
+    display: grid
+    grid-template-columns: 1.5fr 1.7fr 1.2fr 1.7fr
     flex-direction: row
     justify-content: space-between
     align-items: flex-start
-    gap: 1rem
+    gap: min(5rem, 5vw)
     line-height: 1.25
+    padding-top: 1.25rem
+    border-top: 1px solid #333
 
   &img
-    margin-top: 2rem
+    margin-top: 2.5rem
+    width: 15.25rem
+    height: 2rem
+
+  &contacts-img
+    width: 100%
+    margin-top: 0.7rem
 
   &copyright
     display: flex
@@ -249,6 +1321,7 @@ h2
     gap: 2.5rem
     align-items: center
     width: 100%
+    padding-bottom: 1.5rem
 
   &copyright-item
     text-decoration: underline
@@ -259,12 +1332,1024 @@ h2
   margin-left: auto
 
 .footer-list
-    width: 21%
     display: flex
     flex-direction: column
-    gap: 0.75rem
+    gap: 0.8rem
 
 .footer-list__
 
   &title
-    margin-bottom: 0.75rem
+    margin-bottom: 1.25rem
+    font-weight: 700
+    font-size: 1.5rem
+    color: #333
+    display: inline-block
+
+  &link
+    font-size: 1rem
+
+  &link:hover
+    text-decoration: underline
+
+@media screen and (max-width: 1200px)
+
+  .header__
+
+    &logo
+      width: 200px
+      height: 1.5rem
+
+    &popup
+      padding: 4rem 2.5rem
+      max-width: 604px
+
+  .services__
+    
+    &cards
+      gap: 1.5rem
+
+  .services-card__
+
+    &txt
+      font-size: 1rem
+      margin-right: 1rem
+
+  .tariffs__
+
+    &cards
+      gap: 0.85rem
+
+    &info
+      margin-top: 0.6rem
+
+  .tariffs-card
+    padding: 0.9rem 0.7rem
+    font-size: 0.85rem
+    gap: 1rem
+
+  .tariffs-card__
+
+    &title
+      font-size: 1rem
+    
+    &new-price
+      font-size: 2rem
+
+    &discaunt
+      left: -0.3rem
+      top: 0
+
+    &list
+      gap: 1.1rem
+      margin: 1.6rem 0 2rem 0
+
+    &button
+      width: 90%
+      font-size: 1rem
+      margin-top: -0.5rem
+
+  .reviews
+    padding: 2.1rem 0 5rem 0
+
+  .portfolio
+    padding-bottom: 4rem
+
+  .portfolio__
+    
+    &container 
+      gap: 3.4rem
+
+  .portfolio-card__
+
+    &img
+      height: 200px
+    
+    &descr
+      gap: 0.9rem
+
+    &txt
+      font-size: 0.87rem
+
+  .comment
+    padding: 3rem 0 2.5rem
+
+  .request
+    padding-bottom: 5rem
+
+  .request__
+
+    &container
+      display: grid
+      grid-template-columns: 1fr 1.2fr
+      gap: 1.75rem
+
+    &title
+      font-size: 1.4rem
+
+    &txt
+      margin-right: 1rem
+      font-size: 0.86rem
+      line-height: 1
+
+    &imgs
+      position: relative
+      top: -0.8rem
+      row-gap: 1.7rem
+      align-items: flex-start
+
+  .form__
+    
+    &input
+      font-size: 1.25rem
+
+  .footer__
+
+    &nav-list
+      gap: min(1.5rem, 2vw)
+      grid-template-columns: 1.3fr 1.5fr 1fr 1fr
+
+    &img
+      width: 75%
+      height: 100%
+      margin-top: 2rem
+
+    &copyright-item
+      font-size: 13px
+
+  .footer-list__
+
+    &title
+      font-size: 1.25rem
+
+    &link
+      font-size: 0.85rem
+  .info
+    padding-bottom: 1rem
+
+  .info__
+
+    &bg
+      height: 24rem
+
+    &container
+      min-height: 15.5rem
+      gap: 3rem
+      justify-content: center
+      padding-top: 4.8rem
+
+
+    &title
+      font-size: 2rem
+
+    &subtitle-img
+      width: 78px
+      height: 45px
+
+    &subtitle-txt
+      font-size: 1rem
+
+    &txt
+      max-width: 40em
+      top: -1rem
+      position: relative
+      font-size: 0.87rem
+
+  .capabilities
+    padding-top: 2.5rem
+    padding-bottom: 5rem
+
+  .capabilities__
+
+    &container
+      gap: 1rem
+
+    &body
+      padding: 3rem 2.3rem 2.6rem 0.9rem
+      grid-template-columns: 1rem 1fr 0.88fr
+      gap: 1.3rem
+
+    &decor
+      height: 15.5rem
+
+    &list
+      gap: 1.25rem
+
+    &item
+      font-size: 1.13rem
+
+    &card-txt
+      margin-left: 0.5rem
+      font-size: 0.87rem
+
+  .services
+    padding-top: 2rem
+    padding-bottom: 2.2rem
+
+  .services__
+    
+    &container
+      gap: 3.5rem
+
+  .services-card
+    padding: 0.6rem
+    padding-bottom: 1.1rem
+
+  .services-card-front
+    gap: 1.4rem
+
+  .services-card-back
+    padding: 0
+    padding-right: 0.6rem
+
+  .services-card__
+    
+    &img
+      width: 2.5rem
+      height: 2.5rem
+
+  .consultation
+    padding: 2.6rem 3.1rem
+
+  .consultation__
+
+    &container
+      min-height: 10.5rem
+
+    &title
+      font-size: 1.25rem
+
+  .tariffs
+    padding-top: 0
+
+  .tariffs__
+
+    &container
+      gap: 2.15rem
+
+    &button
+      font-size: 1.1rem
+
+@media screen and (max-width: 1024px)
+
+  .header__
+
+    &left
+      gap: 0.8rem
+
+    &right
+      display: flex
+      
+    &logo
+      width: 180px
+      height: 1.5rem
+
+    &tel
+      font-size: 15px
+
+  .burger-active .header__right
+    flex-direction: column-reverse
+
+  .header__
+
+    &menu
+      flex-direction: column
+
+@media screen and (max-width: 1023px)
+
+  h2
+    font-size: 1.2rem
+
+  .container
+    padding: 0 max(6vw, 1rem)
+
+  .services-card__
+
+    &txt
+      font-size: 0.92rem
+      margin-right: 0
+
+  .capabilities
+    padding: 2.5rem 0
+
+  .capabilities__
+
+    &body
+      padding: 3rem 1.8rem 2.4rem 1.2rem
+      grid-template-columns: 1rem 1fr 1.45fr
+      gap: 1.1rem
+
+    &decor
+      height: 14.5rem
+
+    &list
+      gap: 1.25rem
+      margin-top: 0.5rem
+      align-self: start
+
+    &item
+      font-size: 0.93rem
+
+    &card-txt
+      font-size: 0.8rem
+      line-height: 1.35
+
+  .info__
+
+    &bg
+      height: 18.5rem
+
+    &container
+      gap: 1.5rem
+      padding-top: 0.4rem
+    
+    &title
+      max-width: 12.5em
+      text-align: center
+      line-height: 1.2
+
+    &txt
+      top: 0
+      line-height: 1.2
+      font-size: 0.75rem
+
+  .services
+    padding-top: 1rem
+
+  .services__
+
+    &container
+      gap: 2.5rem
+    
+    &cards
+      gap: 1rem
+
+  .box-tariffs .tariffs-card__new-price
+    font-size: 1.25rem
+
+  .box-tariffs .tariffs-card
+    padding: 0.5rem
+
+  .box-tariffs  .tariffs-item
+    left: 1.2rem
+
+  .box-tariffs .tariffs-item::before
+    left: -1.2rem
+
+  .tariffs-card
+    min-width: 8rem
+
+  .tariffs-card__
+
+    &title
+      font-size: 12px
+    
+    &new-price
+      font-size: 20px
+
+    &button
+      width: 100%
+      font-size: 11px
+
+  .consultation__
+
+    &container
+      min-height: unset
+      padding-top: 1.2rem
+      padding-bottom: 1.2rem
+    
+    &title
+      font-size: 0.92rem
+
+    &button
+      font-size: 1rem
+
+  .tariffs
+    padding-top: 0
+
+  .tariffs__
+
+    &container
+      gap: 0.5rem
+      padding-top: 0
+      
+    &button
+      font-size: 0.84rem
+      padding: 10px
+      height: 35px
+      line-height: 1
+
+    &sub-title
+      margin: 0
+      font-size: 0.95rem
+
+    &info
+      margin-top: 1rem
+      font-size: 0.75rem
+
+  .tariffs-card__
+    
+    &discaunt
+      border-radius: 10px
+      width: 46px
+      height: 13px
+      line-height: 0.4
+      font-size: 10px
+      left: -0.1rem
+
+    &list
+      gap: 0.5rem
+      margin: 0.2rem 0 0.7rem 0
+
+    &button
+      padding: 0.55rem
+
+  .tariffs-item
+    left: 1.5rem
+    font-size: 0.75rem
+
+  .tariffs-item::before
+    left: -1.5rem
+    width: 14px
+    height: 14px
+
+  .reviews
+    display: none
+    padding: 1rem
+
+  .portfolio
+    padding-bottom: 2.5rem
+    padding-top: 1.5rem
+
+  .portfolio__cards-wrapper
+    overflow-x: scroll
+    width: 100%
+
+  .portfolio__
+    
+    &container
+      gap: 1.2rem
+
+    &slider
+      display: none
+
+  .portfolio-card-back
+    width: 290px
+
+  .portfolio-card__
+
+    &img
+      width: 290px
+      height: 140px
+
+    &descr
+      gap: 0.9rem
+      padding: 0.8rem 1.1rem 2rem 0.9rem
+
+    &title
+      font-size: 1rem
+      margin: 0 1rem
+      line-height: 1.15
+
+    &result
+      top: 0.5rem
+
+    &txt
+      font-size: 0.73rem
+      line-height: 1.3
+
+  .comment
+    padding: 1rem 0
+
+  .request
+    padding-bottom: 1.6rem
+
+  .request__
+    
+    &container
+      grid-template-columns: 1.1fr 1fr
+      gap: 0.5rem
+
+    &info
+      padding: 2.5rem 1rem
+      gap: 2.3rem
+
+    &title
+      font-size: 1.2rem
+
+    &txt
+      font-size: 0.74rem
+      line-height: 1.2
+
+    &imgs
+      top: 0.3rem
+      row-gap: 0.8rem
+
+    &img:not(:first-child)
+      width: 122px
+
+    &img:first-child
+      width: 50px
+
+  .form
+    gap: 0.5rem
+
+  .form__
+
+    &input
+      font-size: 12px
+
+    &button
+      margin: 0
+      font-size: 12px
+      line-height: 217%
+      padding: 0.53rem
+
+    &alert
+      font-size: 12px
+
+    &link
+      font-size: 12px
+
+  .big-input
+      height: 5.25rem
+
+  .big-input textarea
+    font-size: 12px
+
+  .footer__
+
+    &img
+      width: 80%
+      height: 100%
+      margin-top: 1rem
+
+    &copyright
+      font-size: 0.6rem
+
+  .footer-list__
+
+    &title
+      margin-bottom: 1rem
+      font-size: 1rem
+
+    &item
+      line-height: 0.6
+
+    &link
+      font-size: 0.6rem
+      
+  .accordion__link
+    width: 90vw
+
+  .popup__price-descr
+    white-space: nowrap
+
+  .main__popup .popup__price-descr
+    font-size: 12px
+
+  .main__popup .popup__month-plan
+    margin-top: 2rem
+
+  .main__popup .popup__year-plan
+    margin-top: 1.7rem
+    row-gap: 0.4rem
+    grid-template-columns: 2fr 1fr
+
+  .main__popup .popup__button
+    width: 80%
+    padding: 5px
+    font-size: 0.8rem
+    
+  .popup__price
+    font-size: 1rem
+
+  .popup__discaunt
+    top: -0.8rem
+    left: -0.4rem
+    
+  .main__popup .popup__old-price
+    white-space: nowrap
+    left: 0.7rem
+    top: -0.3rem
+
+@media screen and (max-width: 767px)
+
+  .tariffs__slider
+    display: block
+
+  .box-tariffs  .tariffs-item
+    left: 1.7rem
+    
+  .box-tariffs .tariffs-item::before
+    left: -1.7rem
+
+  .header
+    padding-bottom: 1rem
+
+  .burger-active .header__button
+    display: block
+
+  .header__
+
+    &logo
+      width: 10.3rem
+
+    &button
+      display: none
+
+    &popup
+      padding: 2rem 0.5rem
+
+  .info__
+    
+    &container
+      padding-top: 2.1rem
+      justify-content: space-between
+      gap: 0.8rem
+      min-height: unset
+
+    &subtitle
+      gap: 0.8rem
+
+    &txt
+      font-size: 10px
+      margin: 0 1rem
+
+    &bg
+      height: 17.7rem
+
+    &subtitle-txt
+      font-size: 12px
+
+  .capabilities
+    padding: 1.5rem 0
+
+  .capabilities__
+
+    &container
+      padding: 0 2.5vw
+      gap: 1.5rem
+
+    &title
+      font-size: 0.95rem
+
+    &body
+      gap: 0.5rem
+      padding: 2rem 1rem 2rem 1rem
+      display: flex
+      flex-direction: column-reverse
+
+    &decor
+      display: none
+
+    &card
+      gap: 0.5rem
+
+    &card-txt
+      margin-right: 0
+      min-height: unset
+      text-align: center
+      font-size: 12px
+      
+    &item
+      padding: 0.9rem 0
+      border-top: 1px solid #e9bebe
+      font-size: 0.87rem
+      
+    &list
+      width: 100%
+      gap: 0
+
+  .consultation
+    padding: 0
+    border-radius: 0
+
+  .portfolio-card__result-descr
+    font-size: 0.75rem
+
+  .portfolio-card__result-txt
+    font-size: 0.85rem
+
+  .consultation__
+
+    &container
+      padding-top: 4.4rem
+      padding-bottom: 2.2rem
+      background-image: url(../img/consultation/bg-mobile.png)
+      border-radius: 0
+
+    &title
+      font-size: 1rem
+
+  .highlight
+    font-size: 1.25em
+
+  .main__popup .popup__top-title
+    font-size: 12px
+
+  .main__popup .popup__title
+    font-size: 1rem
+
+  .main__popup
+    gap: 0.8rem
+
+  .popup__list
+    margin-top: 0.7rem
+    gap: 0.78rem
+
+  .tariffs__container
+    padding-top: 1.7rem
+    gap: 1rem
+
+  .box-tariffs .tariffs-card
+    min-width: 14.2rem
+
+  .tariffs-card__old-price
+    font-size: 1rem
+
+  .cloud-tariffs .discaunt
+    width: unset
+    height: unset
+    line-height: 1
+    font-size: 1rem
+    left: 0
+    padding: 0.8rem 1rem
+    top: 1.2rem
+    left: -0.5rem
+
+  .cloud-tariffs .tariffs-card__list
+    position: relative
+    top: -1rem
+    gap: 1.5rem
+    margin: 0
+
+  .cloud-tariffs .tariffs-card__button
+    margin-top: 1rem
+    width: 80%
+    font-size: 1rem
+
+  .tariffs-item
+    font-size: 0.88rem
+    left: 2rem
+
+  .tariffs-item:before
+    left: -2rem
+    width: 20px
+    height: 20px
+
+  .cloud-tariffs .tariffs-card__new-price
+    top: -1rem
+    position: relative
+
+  .tariffs-card
+    gap: 2rem
+    padding: 2rem 0.55rem
+    min-width: 16rem
+
+  .tariffs-card__new-price
+    font-size: 2rem
+
+  .tariffs-card__title
+    font-size: 1.25rem
+
+  .box-tariffs .tariffs-card__list
+    margin: 0.5rem 0 2rem
+
+  .portfolio__cards-container
+    flex-direction: column
+    gap: 1.25rem
+
+  .portfolio-card-wrapper
+    width: 100%
+    padding-right: 0
+
+  .portfolio-card
+    max-width: unset
+    width: 100%
+
+  .portfolio-card-back
+    width: 100%
+
+  .portfolio-card__img
+    width: 100%
+    height: unset
+
+  .services__
+
+    &cards
+      grid-template-columns: 1fr
+
+  .request
+    padding: 0
+
+  .request__
+
+    &container
+      padding: 0
+      gap: 2rem
+      grid-template-columns: 1fr
+
+    &info
+      padding: 2.5rem 0.5rem
+      align-items: center
+      text-align: center
+      gap: 1.2rem
+
+    &txt
+      font-size: 1rem
+
+    &imgs
+      justify-content: center
+      align-items: center
+
+    &img:first-child
+      width: 106px
+
+    &img:not(:first-child)
+      width: 140px
+
+    &form-container
+      padding: 0 max(6vw, 1rem)
+
+    &form
+      max-width: unset
+
+  .form__
+
+    &input
+      padding: 1.25rem 2rem
+      font-size: 1rem
+      
+    &button
+      margin-top: 1.3rem
+      font-size: 0.9rem
+      padding: 1rem
+      line-height: 1
+
+    &warning
+      margin-top: 1rem
+
+    &link
+      margin-top: 0
+      
+
+  .big-input
+    height: 7.2rem
+
+  .big-input textarea
+    font-size: 1rem
+
+  .popup__title
+    margin: 0
+    margin-bottom: 1.5rem
+    font-size: 1rem
+
+  .popup__title p
+    font-size: 13px
+
+  .popup__form 
+    gap: 1.2rem
+
+  .popup .form__button
+    margin: 0
+
+  .popup .form__warning
+    margin: 0
+
+  .info__
+
+    &bg
+      backdrop-filter: blur(8.399999618530273px)
+
+    &title
+      font-size: 1.5rem
+
+    &subtitle
+      margin: 0 1rem
+
+  .footer
+    margin-top: 1.5rem
+
+  .footer__
+
+    &nav-list
+      padding-top: 0.5rem
+      gap: 1rem
+      grid-template-columns: 1fr
+      width: 100%
+
+    &copyright
+      gap: 1rem
+      flex-direction: column
+      align-items: flex-start
+
+    &img
+      margin-top: 0
+      width: 136px
+      height: 17px
+
+    &contacts-img
+      margin-top: 0
+      width: 108px
+      height: 17px
+
+    &copyright
+      flex-direction: column
+
+  .item-contacts-img
+    margin-top: 1.25rem
+    width: 100%
+    display: flex
+    gap: 9vw
+    align-items: center
+
+  .сopyright
+    margin-left: 0
+
+  .footer__copyright-item
+    font-size: 10px
+
+  .footer-list__
+    
+    &title
+      margin-bottom: 0.5rem
+      font-size: 0.85rem
+
+@media screen and (max-width: 480px)
+
+  .header__
+    
+    &tel
+      display: none
+
+  .burger-active 
+    
+    & .header__container
+      padding: 1.5rem 1rem
+
+    & .header__burger
+      right: 1.2rem
+      top: 1rem
+
+    & .header__button
+      width: 280px
+
+  .info__
+
+    &title
+      max-width: 12.5em
+      font-size: 1rem
+
+    &subtitle
+      flex-direction: column
+
+  .services__
+    
+    &cards
+      gap: 0.75rem
+
+  .tariffs__
+
+    &buttons
+      display: none
+
+    &select
+      display: block
+      width: 100vw
+      border-radius: 10px
+      padding: 10px
+      font-weight: 700
+
+    &option:not(:first-child)
+      font-weight: 700
+      color: $red
+      background: $white
+      border: 1px solid #c14646
+      border-radius: 0 0 10px 10px
+      padding: 10px
+      width: 100vw
+      max-width: 320px
+      display: inline-block
+
+    &info
+      text-align: center
+      
+  .active-select
+    border-radius: 10px 10px 0 0
+
+  .сopyright
+    margin-left: 0
+    
+  .footer-list
+    gap: 0.6rem
+
+  .footer-list__
+
+    &item
+      line-height: 0.65
+
+@media screen and (max-width: 360px)
+
+  .popup__closer-img
+    width: 1.5rem
+    height: 1.5rem

@@ -1,734 +1,691 @@
-const theme = document.getElementById('theme');
-const lang = document.getElementById('lang');
-const arrows = document.querySelectorAll('.arrow');
-let burgerIsActive = false;
-const blue = '#415fff';
-const dark = '#1c1c1c';
-const bg = '#f5f5f5';
-let textFontSize = "1rem";
-let titleFontSize = "1.5rem";
-const fontFamily = "Manrope";
-const axisFontSize = "0.6rem";
-let bigChartFont;
-let charts = [];
-let i = 0;
-let chartBg;
-let chartTxt;
-let gridLineColor;
-let gradient;
+// #region global
+const imgPatch = "assets/img/";
+let burgerActive = false;
+let cardsOnPage = 3;
+let showedPopup;
+let currentProgressCard = 0;
+let initialPosition = `translateX(0)`;
+let isElementClicked = false;
+let finishPosition = 0;
+let startPosition = 0;
+let posX = 0;
+let progressCards;
+let boxTariffs;
+let cloudTariffs;
+let tariffsCards;
+let tariffsSlider;
+let tariffsCardsOnPage;
+let boxTariffsCards;
+let boxTariffsSlider;
+let boxTariffsCardsOnPage;
 let screenSize;
-let newsOnPage = 5;
-let page = 1;
-let rowsOnTable;
-let themeColor = sessionStorage.getItem("themeColor");
-const subpagesImgSrc = ['miners', 'transactions', 'earnings', 'hashrate', 'settings'];
-let table =document.querySelector('.table__table-main');
+let currentBoxTariffsCard = 0;
+let currentTariffsCard = 0;
 
-if(document.querySelector('.table__table-main')){
- rowsOnTable = document.querySelector('.table__table-main').querySelectorAll(".table__tr").length - 1;
- if(table.dataset.display !== undefined){
-  table.style.display = table.dataset.display; 
- }else{
-  table.style.display = 'flex';
- }
+function popupAlign(showedPopup){
+  if(!showedPopup){ return; }
+  if(window.innerHeight < showedPopup.offsetHeight){
+    document.querySelector('.main__popup-container').style.alignItems = 'flex-start';
+    document.querySelector('.header__popup-container').style.alignItems = 'flex-start';
+  }else{
+    document.querySelector('.main__popup-container').style.alignItems = 'center';
+    document.querySelector('.header__popup-container').style.alignItems = 'center';
+  }
 }
 
-const payment = document.getElementById('payment');
-    const paymentCircle = document.getElementById('paymentCircle');
-    if(payment){
-      payment.addEventListener('change', () => {
-        paymentCircle.classList.toggle('checked');
-        document.getElementById('paymentCircleBg').classList.toggle('checked');
-    });
-  }
-  const percent = document.getElementById('percent');
-  const percentCircle = document.getElementById('percentCircle');
-  if(percent){
-    percent.addEventListener('change', () => {
-      percentCircle.classList.toggle('checked');
-      document.getElementById('percentCircleBg').classList.toggle('checked');
-  });
-}
-window.addEventListener("load", () => {
-  screenSize = window.innerWidth;
-  switchNews(screenSize);
-  if(document.getElementById('tableTo')){
-    document.getElementById('tableTo').textContent = rowsOnTable;
-    document.getElementById('tableOf').textContent = document.querySelectorAll(".table__tr").length - newsWrapperCount;
-  }
-  if (themeColor === null) {
-    themeColor = 'light';
-  }
-  theme.click();
-  if(document.getElementById('subpagesSelect')){
-    document.getElementById('subpagesSelect').addEventListener('change', function() {
-      if(this.dataset.pool !== undefined){
-        window.location.href = `${this.dataset.pool}-pool-miners-transactions-${this.value.toLowerCase()}.html`;
-      }
-    });
-  }
-  if(document.querySelector('.info-card__select')){
-    document.querySelectorAll('.hathor-card-content').forEach((item, i )=> {
-      if (i === 0){
-        item.style.display = 'block';
-      }else{
-        item.style.display = 'none';
-      }
-    });
-    document.querySelector('.info-card__select').addEventListener('change', function() {
-      document.querySelectorAll('.hathor-card-content').forEach((item, i )=> {
-        if (i !== this.selectedIndex){
-          item.style.display = 'none';
-        }else{
-          item.style.display = 'block';
-        }
-      });
-    });
-  }
-  chartsMedia(screenSize);
-});
-
-document.addEventListener("click", (event)=>{
-  if (event.target.classList.contains('pools') || event.target.classList.contains('pools__summary')){
-  }else{
-    document.querySelector('.pools').removeAttribute('open');
-  }
-});
-
-theme.addEventListener('click', () => {
-  sessionStorage.setItem("themeColor", themeColor);
-  if(themeColor === 'dark'){
-    themeColor = 'light';
-    document.querySelector('body').classList.add('light-theme');
-    if(burgerIsActive === false){
-      theme.querySelector('.header__button-img').src = 'assets/img/header/sun-black.svg';
-      lang.querySelector('.header__button-img').src = 'assets/img/header/website-black.svg';
-      }
-    if(document.getElementById('get-started')){
-      document.getElementById('get-started').src = 'assets/img/get-started-white.svg';
-    }
-    document.querySelectorAll('.info-card__decor').forEach((item)=> {
-      item.src="assets/img/icons/calendar.svg";
-    });
-    arrows.forEach(item => {
-      if(item){
-        if(item.classList.contains('pagination__img')){
-          item.src = 'assets/img/icons/arrow-black.svg';
-        }else{
-          item.src = 'assets/img/icons/arrow-white.svg';
-        }
-      }
-    });
-    document.querySelectorAll('.video__icon').forEach((item)=> {
-      item.src = `assets/img/videos/start-video-white.svg`;
-    });
-    document.querySelectorAll('.subpages-nav__img').forEach((item, i )=> {
-      item.src = `assets/img/icons/${subpagesImgSrc[i]}-black.svg`;
-    });
-    if(document.querySelector('.copy__img')){
-      document.querySelector('.copy__img').src = 'assets/img/icons/copy-black.svg';
-    }
-    document.querySelectorAll('.advantagesСard__img').forEach((item, i)=> {
-      item.src= `assets/img/advantages/${i + 1}-white.jpg`;
-    });
-    document.querySelectorAll('.video__zoom-in').forEach((item)=> {
-      item.src= `assets/img/videos/search-zoom-in-white.svg`;
-    });
-  }else{
-    themeColor = 'dark';
-    arrows.forEach(item => {
-      if(item){
-        if(item.classList.contains('pagination__img')){
-          item.src = 'assets/img/icons/arrow-white.svg';
-        }else{
-          item.src = 'assets/img/icons/arrow-black.svg';
-        }
-      }
-    });
-    document.querySelectorAll('.info-card__decor').forEach((item)=> {
-      item.src="assets/img/icons/calendar-black.svg";
-    });
-    document.querySelectorAll('.video__icon').forEach((item)=> {
-      item.src = `assets/img/videos/start-video.svg`;
-    });
-    document.querySelectorAll('.subpages-nav__img').forEach((item, i )=> {
-      item.src = `assets/img/icons/${subpagesImgSrc[i]}.svg`;
-    });
-    document.querySelector('body').classList.remove('light-theme');
-    if(burgerIsActive === false){
-    theme.querySelector('.header__button-img').src = 'assets/img/header/sun-white.svg';
-    lang.querySelector('.header__button-img').src = 'assets/img/header/website-white.svg';
-    }
-    if(document.getElementById('get-started')){
-      document.getElementById('get-started').src = 'assets/img/get-started-dark.svg';
-    }
-    if(document.querySelector('.copy__img')){
-      document.querySelector('.copy__img').src = 'assets/img/icons/copy.svg';
-    }
-    document.querySelectorAll('.advantagesСard__img').forEach((item, i)=> {
-      item.src= `assets/img/advantages/${i + 1}.jpg`;
-    });
-    document.querySelectorAll('.video__zoom-in').forEach((item)=> {
-      item.src= `assets/img/videos/search-zoom-in-black.svg`;
-    });
-  }
-  chartsUptate();
-});
-
-function showBurger(){
-  if(burgerIsActive){
-    burgerIsActive = false;
-  }else{
-    burgerIsActive = true;
-  }
-  document.querySelector('.header__main').classList.toggle('burgerActive');
-  document.querySelector('.header__top').classList.toggle('burgerActive');
-  document.querySelector('.header__menu').classList.toggle('burgerActive');
-  document.querySelector('.menu__wallet').classList.toggle('burgerActive');
-  document.querySelector('.menu__list').classList.toggle('burgerActive');
-  document.querySelector('.header__buttons').classList.toggle('burgerActive');
-  document.querySelector('.header__logo').classList.toggle('burgerActive');
-  document.querySelector('.header__menu-burger').classList.toggle('burgerActive');
-  document.querySelector('.header__signup').classList.toggle('burgerActive');
-  theme.querySelector('.header__button-img').src = 'assets/img/header/sun-black.svg';
-  lang.querySelector('.header__button-img').src = 'assets/img/header/website-black.svg';
-}
-
-function switchNews(screenSize) {
-  if(newsWrapperCount < 2){return;}
-  if (screenSize < 769) {
-    if (newsOnPage === 5){
-      newsOnPage = 3;
-      if( page * 1 === 1){
-        for (i = newsOnPage; i < newsWrapperCount; i++) {
-          paginationNumbers[i].style.display = 'none';
-        }
-      }else if( page * 1 === newsWrapperCount){
-        for (i = 0; i < newsWrapperCount - newsOnPage; i++) {
-          paginationNumbers[i].style.display = 'none';
-        }
-      }else{
-        for (i = 0; i < newsWrapperCount; i++) {
-          if(i > page - newsOnPage && i < page * 1 + 1){
-          }else{
-            paginationNumbers[i].style.display = 'none';
-          }
-        }
-      }
-      }
-  }else{
-    if (newsOnPage === 3){
-      newsOnPage = 5;
-      if( page * 1 === 1){
-        for (i = 0; i < newsOnPage; i++) {
-          paginationNumbers[i].style.display = 'flex';
-        }
-      }else if( page * 1 === newsWrapperCount){
-        for (i = newsWrapperCount - newsOnPage; i < newsWrapperCount; i++) {
-          paginationNumbers[i].style.display = 'flex';
-        }
-      }else{
-        // Если оба элемента существуют, устанавливаем `display: flex` для обоих
-        if (paginationNumbers[page - 3] && paginationNumbers[page * 1 + 1]) {
-          paginationNumbers[page * 1 + 1].style.display = 'flex';
-          paginationNumbers[page - 3].style.display = 'flex';
-        } else {
-          // Если элемент слева существует, устанавливаем `display: flex` для него
-          if (paginationNumbers[page - 3]) {
-            paginationNumbers[page - 4].style.display = 'flex';
-            paginationNumbers[page - 3].style.display = 'flex';
-          }
-          // Если элемент справа существует, устанавливаем `display: flex` для него
-          if ( paginationNumbers[page * 1 + 1]) {
-            paginationNumbers[page * 1 + 1].style.display = 'flex';
-            paginationNumbers[page * 1 + 2].style.display = 'flex';
-          }
-        }
-
-      }
-    }
-  }
+function showPopup(){
+  document.querySelector('.header__popup-container').classList.add('show');
+  document.querySelector('.header__popup').classList.add('show');
+  showedPopup = document.getElementById('headerPopup');
+  popupAlign(showedPopup);
+  setTimeout(() => {
+    document.querySelector('.header__popup').style.transform = 'translateY(0)';
+  }, 100);
 }
 
 window.addEventListener('resize', () => {
+  resizeScreen();
+  popupAlign(showedPopup);
+});
+
+function resizeScreen(){
   screenSize = window.innerWidth;
-  switchNews(screenSize);
-  if (screenSize > 912) {
-    document.querySelector('.header__main').classList.remove('burgerActive');
-    document.querySelector('.header__top').classList.remove('burgerActive');
-    document.querySelector('.header__menu').classList.remove('burgerActive');
-    document.querySelector('.menu__wallet').classList.remove('burgerActive');
-    document.querySelector('.menu__list').classList.remove('burgerActive');
-    document.querySelector('.header__buttons').classList.remove('burgerActive');
-    document.querySelector('.header__logo').classList.remove('burgerActive');
-    document.querySelector('.header__menu-burger').classList.remove('burgerActive');
-    document.querySelector('.header__signup').classList.remove('burgerActive');
-    burgerIsActive = false;
-    if(themeColor === 'light'){
-      theme.querySelector('.header__button-img').src = 'assets/img/header/sun-black.svg';
-      lang.querySelector('.header__button-img').src = 'assets/img/header/website-black.svg';
-    }else{
-      theme.querySelector('.header__button-img').src = 'assets/img/header/sun-white.svg';
-      lang.querySelector('.header__button-img').src = 'assets/img/header/website-white.svg';
-    }
-  }
-  imgResize();
-  chartsMedia(screenSize);
-});
-
-
-
-let newsWrapperCount = document.querySelectorAll('.news__wrapper').length;
-let newsWrappers;
-if(newsWrapperCount === 0){
-  newsWrapperCount = document.querySelectorAll('.table__table-main').length;
-  newsWrappers = document.querySelectorAll('.table__table-main');
-}else{
-  newsWrappers = document.querySelectorAll('.news__wrapper');
-}
-const newsPagination = document.querySelector('.pagination__numbers');
-if(newsWrapperCount > 1){
-for (let i = 0; i < newsWrapperCount; i++) {
-  const paginationNumber = document.createElement('div');
-  paginationNumber.classList.add('pagination__number');
-  paginationNumber.textContent = i + 1;
-  if(i === 0){
-    paginationNumber.classList.add('active-number');
-  }
-  newsPagination.appendChild(paginationNumber);
-
-  paginationNumber.addEventListener('click', () => {
-    page = paginationNumber.textContent;
-    if (paginationNumbers[page] && page > 1){
-    if (window.getComputedStyle(paginationNumbers[page]).display === 'none') {
-      paginationNumbers[page].style.display = 'flex';
-      paginationNumbers[page - newsOnPage].style.display = 'none';
-    }else if(window.getComputedStyle(paginationNumbers[page - 2]).display === 'none'){
-      paginationNumbers[page - 2].style.display = 'flex';
-      paginationNumbers[page  * 1 + newsOnPage - 2].style.display = 'none';
-    }
-  }
-    pagination(page);
-  })}
-  if(document.getElementById('back')){
-    document.getElementById('back').classList.add('unactive');
-  }
-}else{
-  if(document.querySelector('.pagination')){
-    document.querySelector('.pagination').style.display = 'none';
-  }
-  if(document.querySelector('.table__navigation')){
-    document.querySelector('.table__navigation').style.display = 'none';
-  }
-}
-const paginationNumbers = document.querySelectorAll('.pagination__number');
-function pagination(page){
-
-if(rowsOnTable){
-  document.getElementById('tableFrom').textContent = rowsOnTable * (page - 1)  + 1;
-  if(page * 1 === newsWrapperCount){
-    document.getElementById('tableTo').textContent = document.getElementById('tableOf').textContent;
-   }else{
-    document.getElementById('tableTo').textContent = rowsOnTable * page;
-   }
-}
-
-
-
-  paginationNumbers.forEach((item, index )=> {
-    if (index != page - 1){
-      item.classList.remove('active-number');
-    }else{
-      item.classList.add('active-number');
-    }
-  });
-  if(page == newsWrapperCount){
-    document.getElementById('forward').classList.add('unactive');
-    document.getElementById('back').classList.remove('unactive');
-  }else if(page == 1) {
-    document.getElementById('back').classList.add('unactive');
-    document.getElementById('forward').classList.remove('unactive');
+  if(screenSize < 1025){
+    headerMenu.style.display = 'none';
+    burger.style.display = 'flex';
+    document.querySelector('.header__right').appendChild(document.querySelector('.header__button'));
+    document.querySelector('.header__right').appendChild(burger);
   }else{
-    document.getElementById('back').classList.remove('unactive');
-    document.getElementById('forward').classList.remove('unactive');
+    headerMenu.style.display = 'flex';
+    burger.style.display = 'none';
+    document.querySelector('.header__menu').classList.remove('show');
+    document.querySelector('.header').classList.remove('burger-active');
+    document.querySelector('.header__left').appendChild(document.querySelector('.header__tel'));
+    document.querySelector('.header__menu').appendChild(document.querySelector('.header__button'));
+    document.querySelector('.header__right').appendChild(burger);
+    burgerActive = false;
   }
-  newsWrappers.forEach((wrapper, index) => {
-  if (index !== page - 1) {
- wrapper.style.display = 'none';
-}else{
-wrapper.style.display = 'flex';
-}
-  });
-  if(document.querySelector('.table__table-main')){
-    if(page - 1 !== 0){
-      if(table.dataset.display !== undefined){
-        table.style.display = table.dataset.display; 
-       }else{
-        table.style.display = 'flex';
-       }
-    document.querySelector('.table__table-main thead').style.display = 'none';
-    document.querySelector('.table__table-main tbody').style.display = 'none';
-    }else{
-      document.querySelector('.table__table-main thead').style.display = 'flex';
-      document.querySelector('.table__table-main tbody').style.display = 'flex';
+  if(screenSize < 768){
+    cardsOnPage = 0;
+    currentProgressCard = 0;
+    for(i = 0; i < progressCards.length; i++){
+      progressCards[i].style.transform = `translateX(0)`;
     }
-    if(document.querySelector('.table__table-main tfoot')){
-      newsWrappers[page - 1].appendChild(document.querySelector('.table__table-main tfoot'));
-    }
+  }else if(screenSize < 1440  &&  screenSize > 768){
+    cardsOnPage = 2;
+  }else{
+    cardsOnPage = 3;
+  }
+  if(screenSize < 768){
+    //document.querySelector('.item-contacts-img').appendChild(document.querySelector('.footer__img'));
+    document.querySelector('.item-contacts-img').insertBefore(document.querySelector('.footer__img'), document.querySelector('.item-contacts-img').firstChild);
+  }else{
+    document.querySelector('.item-img').appendChild(document.querySelector('.footer__img'));
+  }
+  if(document.querySelector('.cloud-tariffs').offsetWidth > 0){
+    tariffsCardsOnPage = Math.floor(document.querySelector('.cloud-tariffs').offsetWidth / document.querySelector('.cloud-tariffs').querySelector('.tariffs-card').offsetWidth);
+  }
+  if(document.querySelector('.box-tariffs').offsetWidth > 0){
+    boxTariffsCardsOnPage = Math.floor(document.querySelector('.box-tariffs').offsetWidth / document.querySelector('.box-tariffs').querySelector('.tariffs-card').offsetWidth);
   }
 }
 
+document.addEventListener('DOMContentLoaded', function(){
 
-if (newsWrapperCount > newsOnPage){
-  const paginationEllipsis = document.createElement('div');
-  paginationEllipsis.classList.add('pagination__ellipsis');
-  newsPagination.appendChild(paginationEllipsis);
-  paginationEllipsis.textContent = '...';
-  document.querySelector('.pagination__ellipsis').addEventListener('click', () => {
+const boxTariffsButton = document.getElementById('boxTariffsButton');
+const cloudTariffsButton = document.getElementById('cloudTariffsButton');
+boxTariffs = document.querySelector('.box-tariffs');
+cloudTariffs = document.querySelector('.cloud-tariffs');
+tariffsSlider  = document.querySelector(".cloud-tariffs");
+tariffsCards = tariffsSlider.getElementsByClassName("tariffs-card");
+boxTariffsSlider  = document.querySelector(".box-tariffs");
+boxTariffsCards = boxTariffsSlider.getElementsByClassName("tariffs-card");
 
-      for( i = page; i < newsWrapperCount; i++ ) {
-        if(window.getComputedStyle(paginationNumbers[i]).display === 'none'){
-          page = i + 1;
-          break;
-        }
-      }
-      for( i = 0; i < newsWrapperCount - newsOnPage; i++ ) {
-        paginationNumbers[i].style.display = 'none';
-      }
-      for( i = page - 2; i < Math.min(page + newsOnPage - 2, newsWrapperCount); i++ ) {
-        paginationNumbers[i].style.display = 'flex';
-      }
-    pagination(page);
-  })
-  document.querySelectorAll('.pagination__number').forEach((item, index )=> {
-    if (index + 1 > newsOnPage){
-      item.style.display = 'none';
-    }else{
-
-    }
-  });
-  
-}
-if(document.getElementById('forward')){
-  document.getElementById('forward').addEventListener('click', () => {
-  if (page < newsWrapperCount){
-    page++;
-    if(page >= newsOnPage && page < newsWrapperCount ){
-      paginationNumbers[page].style.display = 'flex';
-      paginationNumbers[page - newsOnPage].style.display = 'none';
-    }
-   pagination(page);
+document.querySelector('.tariffs__select-container').addEventListener('click', function(e) {
+  document.querySelector('.tariffs__select').classList.toggle('active-select');
+  document.querySelectorAll('.tariffs__option')[1].classList.add('show');
+  if(e.target.id === 'cloud-option' && e.target.classList.contains('show')){
+    document.querySelector('.tariffs__select').appendChild(document.getElementById('cloud-option'));
+    document.querySelector('.tariffs__select-container').appendChild(document.getElementById('box-option'));
+    document.querySelectorAll('.tariffs__option').forEach(item => {
+      item.classList.remove('show');
+    });
+    cloudTariff();
+  }else if(e.target.id === 'box-option' && e.target.classList.contains('show')){
+    document.querySelector('.tariffs__select').appendChild(document.getElementById('box-option'));
+    document.querySelector('.tariffs__select-container').appendChild(document.getElementById('cloud-option'));
+    document.querySelectorAll('.tariffs__option').forEach(item => {
+      item.classList.remove('show');
+    });
+    boxTariff();
   }
 });
+
+boxTariffsButton.addEventListener('click', () => {
+  boxTariff();
+});
+
+cloudTariffsButton.addEventListener('click', () => {
+  cloudTariff();
+});
+
+document.querySelector('.consultation__button').addEventListener('click', () => {
+  showPopup();
+});
+
+document.querySelectorAll('.buy-button').forEach(item => {
+  item.addEventListener('click', () => {
+    popupcloser(item);
+    setTimeout(() => {
+      showPopup();
+    }, "400");
+  });
+});
+
+// #endregion 
+
+// #region boxTariffs
+
+
+let isBoxTariffsClicked = false;
+let boxTariffsInitialPosition = `translateX(0)`;
+let boxTariffsFinishPosition = 0;
+let boxTariffsStartPosition = 0;
+let boxTariffsPosX = 0;
+
+document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+
+
+
+function boxTariffsPreviousCard () {
+  if(currentBoxTariffsCard !== 0){
+    if(boxTariffsCards.length < (currentBoxTariffsCard + boxTariffsCardsOnPage)){
+      document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
+    }else{
+      document.getElementById("tariffs-right-arrow").style.opacity = "1";
+    }
+    currentBoxTariffsCard--;
+    if(currentBoxTariffsCard === 0){
+      document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+    }else{
+      document.getElementById("tariffs-left-arrow").style.opacity = "1";
+    }
+    boxTariffsInitialPosition = `translateX(-${currentBoxTariffsCard}00%)`;
+    for(i = 0; i < boxTariffsCards.length; i++){
+      boxTariffsCards[i].style.transform = `translateX(-${currentBoxTariffsCard}00%)`;
+    }
+  }
 }
-if(document.getElementById('back')){
-document.getElementById('back').addEventListener('click', () => {
-  if (page * 1 < 2){
+
+function boxTariffsNextCard () {
+  if(boxTariffsCards.length >= currentBoxTariffsCard + boxTariffsCardsOnPage){
+    document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-right-arrow").style.opacity = "1";
+  }
+  if(currentBoxTariffsCard >= boxTariffsCards.length - boxTariffsCardsOnPage){
+  }else{
+    currentBoxTariffsCard++;
+    if(currentBoxTariffsCard === 0){
+      document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+    }else{
+      document.getElementById("tariffs-left-arrow").style.opacity = "1";
+    }
+    boxTariffsInitialPosition = `translateX(-${currentBoxTariffsCard}00%)`;
+    for(i = 0; i < boxTariffsCards.length; i++){
+      boxTariffsCards[i].style.transform = `translateX(-${currentBoxTariffsCard}00%)`;
+    }
+  }
+}
+
+boxTariffsSlider.addEventListener('mousedown', function(e) {
+  boxTariffsFinishPosition = e.pageX;
+  isBoxTariffsClicked = true;
+});
+
+boxTariffsSlider.addEventListener('touchstart', function(e) {
+  boxTariffsFinishPosition = e.touches[0].pageX;
+  isBoxTariffsClicked = true;
+});
+
+boxTariffsSlider.addEventListener('mousemove', function(e) {
+  boxTariffsPosX = e.pageX;
+ boxTariffsMoveFunction();
+});
+
+boxTariffsSlider.addEventListener('touchmove', function(e) {
+  boxTariffsPosX = e.touches[0].pageX;
+ boxTariffsMoveFunction();
+});
+
+boxTariffsSlider.addEventListener('mouseup', function(e) {
+  isBoxTariffsClicked = false;
+  boxTariffsSliderFunction();
+});
+
+boxTariffsSlider.addEventListener('touchend', function(e) {
+  isBoxTariffsClicked = false;
+  boxTariffsSliderFunction();
+});
+
+function boxTariffsMoveFunction(){
+  if(isBoxTariffsClicked){
+    boxTariffsCW = boxTariffsSlider.offsetWidth;
+    p = (currentBoxTariffsCard + ((boxTariffsFinishPosition - boxTariffsPosX) / boxTariffsCW)) * 100;
+    if(currentBoxTariffsCard <boxTariffsCards.length){
+      for(i = 0; i <boxTariffsCards.length; i++){
+      if(p > 0){
+       boxTariffsCards[i].style.transform = `translateX(-${p}%)`;
+      }else{
+       boxTariffsCards[i].style.transform = `translateX(${-p}%)`;
+      }
+      }
+    }
+  }
+}
+
+function boxTariffsSliderFunction(){
+  boxTariffsFinishPosition = boxTariffsFinishPosition - boxTariffsPosX;
+  if(currentBoxTariffsCard === 0 || currentBoxTariffsCard === boxTariffsCards.length - boxTariffsCardsOnPage){
+    for(i = 0; i <boxTariffsCards.length; i++){
+      boxTariffsCards[i].style.transform = boxTariffsInitialPosition;
+     }
+  }
+  
+  if(boxTariffsPosX !== 0){
+    if(boxTariffsFinishPosition > 100){
+      boxTariffsNextCard();
+    }else if(boxTariffsFinishPosition < -100){
+      boxTariffsPreviousCard();
+    }else{
+      for(i = 0; i <boxTariffsCards.length; i++){
+       boxTariffsCards[i].style.transform = boxTariffsInitialPosition;
+      }
+    }
+  }
+  isBoxTariffsClicked = false;
+  boxTariffsFinishPosition = 0;
+  boxTariffsPosX = 0;
+}
+
+// #endregion
+
+// #region cloudTariffs
+let isTariffsClicked = false;
+let tariffsInitialPosition = `translateX(0)`;
+let tariffsFinishPosition = 0;
+let tariffsStartPosition = 0;
+let tariffsPosX = 0;
+
+document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+
+document.getElementById('tariffs-right-arrow').addEventListener('click', () => {
+  if(document.querySelector('.box-tariffs').offsetWidth > 0){
+    boxTariffsNextCard();
+  }else{
+    tariffsNextCard();
+  }
+});
+
+document.getElementById('tariffs-left-arrow').addEventListener('click', () => {
+  if(document.querySelector('.box-tariffs').offsetWidth > 0){
+    boxTariffsPreviousCard();
+  }else{
+    tariffsPreviousCard();
+  }
+});
+
+function tariffsPreviousCard () {
+  document.getElementById("tariffs-right-arrow").style.opacity = "1";
+  if(currentTariffsCard <= 1){
+    document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-left-arrow").style.opacity = "1";
+  }
+  if(currentTariffsCard !== 0){
+    currentTariffsCard--;
+    tariffsInitialPosition = `translateX(-${currentTariffsCard}00%)`;
+    for(i = 0; i < tariffsCards.length; i++){
+      tariffsCards[i].style.transform = `translateX(-${currentTariffsCard}00%)`;
+      tariffsCards[i].classList.remove('tariffs-card-focused');
+    }
+    tariffsCards[currentTariffsCard].classList.add('tariffs-card-focused');
+  }
+}
+
+function tariffsNextCard () {
+  if( tariffsCards.length > tariffsCardsOnPage){
+    document.getElementById("tariffs-left-arrow").style.opacity = "1";
+  }
+  if(currentTariffsCard >=  tariffsCards.length - tariffsCardsOnPage - 1){
+    document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-right-arrow").style.opacity = "1";
+  }
+  if(currentTariffsCard >= tariffsCards.length - tariffsCardsOnPage){
+  }else{
+    currentTariffsCard++;
+    tariffsInitialPosition = `translateX(-${currentTariffsCard}00%)`;
+    for(i = 0; i < tariffsCards.length; i++){
+      tariffsCards[i].style.transform = `translateX(-${currentTariffsCard}00%)`;
+      tariffsCards[i].classList.remove('tariffs-card-focused');
+    }
+    tariffsCards[currentTariffsCard].classList.add('tariffs-card-focused');
+  }
+}
+
+tariffsSlider.addEventListener('mousedown', function(e) {
+  tariffsFinishPosition = e.pageX;
+  isTariffsClicked = true;
+});
+
+tariffsSlider.addEventListener('touchstart', function(e) {
+  tariffsFinishPosition = e.touches[0].pageX;
+  isTariffsClicked = true;
+});
+
+tariffsSlider.addEventListener('mousemove', function(e) {
+  tariffsPosX = e.pageX;
+ tariffsMoveFunction();
+});
+
+tariffsSlider.addEventListener('touchmove', function(e) {
+  tariffsPosX = e.touches[0].pageX;
+ tariffsMoveFunction();
+});
+
+tariffsSlider.addEventListener('mouseup', function(e) {
+  isTariffsClicked = false;
+  tariffsSliderFunction();
+});
+
+tariffsSlider.addEventListener('touchend', function(e) {
+  isTariffsClicked = false;
+  tariffsSliderFunction();
+});
+
+function tariffsMoveFunction(){
+  if(isTariffsClicked){
+    tariffsCW = tariffsSlider.offsetWidth;
+    p = (currentTariffsCard + ((tariffsFinishPosition - tariffsPosX) / tariffsCW)) * 100;
+    if(currentTariffsCard <tariffsCards.length){
+      for(i = 0; i <tariffsCards.length; i++){
+      if(p > 0){
+       tariffsCards[i].style.transform = `translateX(-${p}%)`;
+      }else{
+       tariffsCards[i].style.transform = `translateX(${-p}%)`;
+      }
+      }
+    }
+  }
+}
+
+function tariffsSliderFunction(){
+  tariffsFinishPosition = tariffsFinishPosition - tariffsPosX;
+  if(currentTariffsCard === 0 || currentTariffsCard === tariffsCards.length - tariffsCardsOnPage){
+    for(i = 0; i <tariffsCards.length; i++){
+      tariffsCards[i].style.transform = tariffsInitialPosition;
+     }
+  }
+  
+  if(tariffsPosX !== 0){
+    if(tariffsFinishPosition > 100){
+      tariffsNextCard();
+    }else if(tariffsFinishPosition < -100){
+      tariffsPreviousCard();
+    }else{
+      for(i = 0; i <tariffsCards.length; i++){
+       tariffsCards[i].style.transform = tariffsInitialPosition;
+      }
+    }
+  }
+  isTariffsClicked = false;
+  tariffsFinishPosition = 0;
+  tariffsPosX = 0;
+}
+
+// #endregion 
+
+// #region portfolio
+
+document.getElementById('right-arrow').addEventListener('click', () => {
+  nextProgressCard();
+});
+
+document.getElementById('left-arrow').addEventListener('click', () => {
+  previousProgressCard();
+});
+
+progressCards = document.getElementsByClassName("portfolio-card-wrapper");
+const progressSlider = document.querySelector(".portfolio__cards-container");
+document.getElementById("left-arrow").style.opacity = "0.72";
+if(progressCards.length <= cardsOnPage){
+  progressSlider.style.justifyContent = 'center';
+  progressCards[progressCards.length - 1].classList.add('portfolio-card-adaptive');
+  document.getElementById("right-arrow").style.opacity = "0.72";
+}
+
+const portfolioCards = document.querySelector('.portfolio__cards').querySelectorAll('.portfolio-card');
+portfolioCards.forEach((listItem) => {
+  listItem.addEventListener('click', () => {
+    if(finishPosition !== 0){ return; }
+      listItem.classList.add('flipped');
+      listItem.querySelector('.portfolio-card-front').classList.toggle('hide');
+      listItem.querySelector('.portfolio-card-back').classList.toggle('show');
+  });
+});
+
+progressSlider.addEventListener('mouseup', function(e) {
+  if(cardsOnPage > 0){
+    progressSliderFunction();
+  }
+});
+progressSlider.addEventListener('touchend', function(e) {
+  if(cardsOnPage > 0){
+    progressSliderFunction();
+  }
+});
+
+function previousProgressCard() {
+  if(currentProgressCard <= 1){
+    document.getElementById("left-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("left-arrow").style.opacity = "1";
+  }
+  if(currentProgressCard !== 0){
+    currentProgressCard--;
+    initialPosition = `translateX(-${currentProgressCard}00%)`;
+    for(i = 0; i < progressCards.length; i++){
+      progressCards[i].style.transform = `translateX(-${currentProgressCard}00%)`;
+    }
+  }
+  if(currentProgressCard < progressCards.length - cardsOnPage){
+    document.getElementById("right-arrow").style.opacity = "1";
+  }
+}
+
+function nextProgressCard() {
+  if(currentProgressCard >= progressCards.length - cardsOnPage - 1){
+    document.getElementById("right-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("right-arrow").style.opacity = "1";
+  }
+  if(currentProgressCard >= progressCards.length - cardsOnPage){
+  }else{
+    currentProgressCard++;
+    initialPosition = `translateX(-${currentProgressCard}00%)`;
+    for(i = 0; i < progressCards.length; i++){
+      progressCards[i].style.transform = `translateX(-${currentProgressCard}00%)`;
+    }
+  }
+  if(currentProgressCard > 0){
+    document.getElementById("left-arrow").style.opacity = "1";
+  }
+}
+
+function progressSliderFunction(){
+  if(currentProgressCard >= progressCards.length - cardsOnPage || currentProgressCard === 0){
+    for(i = 0; i < progressCards.length; i++){
+      progressCards[i].style.transform = initialPosition;
+    }
+  }
+  finishPosition = startPosition - posX;
+  if(finishPosition === 0){
+    isElementClicked = false;
+    startPosition = 0;
     return;
   }
-  page--;
-  if (page > 1){
-      if (window.getComputedStyle(paginationNumbers[page - 2]).display === 'none'){
-        paginationNumbers[page - 2].style.display = 'flex';
-        paginationNumbers[page * 1 + (newsOnPage - 2)].style.display = 'none';
-      }
-  }
-  pagination(page);
-});
-function copy(element) {
-  if(element.querySelector(".command__txt")){
-    navigator.clipboard.writeText(element.querySelector(".command__txt").textContent);
-  }
-  if(element.querySelector(".table__txt")){
-    navigator.clipboard.writeText(element.querySelector(".table__txt").textContent);
-  }
-  if (event.target.classList.contains('copy-img')){
-    navigator.clipboard.writeText(element.textContent);
+  if(finishPosition > 100){
+    nextProgressCard();
+  }else if(finishPosition < -100){
+    previousProgressCard();
   }else{
-    return;
-  }
-}
-}
-
-document.querySelectorAll(".options__input").forEach(item => {
-  item.addEventListener("click", () => {
-    document.querySelectorAll(".options__input").forEach(input => {
-      input.classList.remove("active-input");
-    });
-    item.classList.add("active-input");
-  });
-});
-
-const containerWidth = 80;
-const rem = 16;
-const scale = 1.5;
-const margin = 1;
-let imgAspectRatio;
-let zoomImgWidth;
-
-const gallery = document.querySelector('.gallery');
-if(gallery){
-  gallery.addEventListener('click', function(event) {
-    if (event.target.tagName != 'IMG') { return; };
-    let oTarget = event.target, nHeight, nWidth;
-    let imgContainer = this.appendChild(document.createElement('DIV'));
-    let zoomImg = imgContainer.appendChild(document.createElement('DIV'));
-    imgAspectRatio = oTarget.offsetWidth / oTarget.offsetHeight;
-  
-    imgContainer.addEventListener('click', function(event) {
-      event.stopPropagation();
-      zoomImg.addEventListener('transitionend', function() { zoomImg.remove(); imgContainer.remove();});
-      zoomImg.style.transition = `.5s ease-in`;
-      zoomImg.style.height = zoomImg.style.width = `0px`;
-      gallery.classList.toggle('show', false);
-    });
-  
-    imgContainer.classList.toggle('active-img-container');
-    imgContainer.style.position = 'fixed';
-    imgContainer.style.width = "100vw";
-    imgContainer.style.height = "100vh";
-    imgContainer.style.zIndex = 10;
-    imgContainer.style.top = 0;
-    imgContainer.style.left = 0;
-  
-    zoomImg.style.position = `fixed`;
-    zoomImg.style.background = `center / 100% 100% no-repeat url('${oTarget.currentSrc}')`;
-    zoomImg.classList.toggle('active-img');
-    zoomImg.style.position = 'fixed';
-    zoomImg.style.transform = `scale(${scale}) translate(-33.3%, -33.5%)`;
-    zoomImg.style.top = '50%';
-    zoomImg.style.left = '50%';
-    zoomImg.style.borderRadius = `3.5%`;
-    zoomImg.style.cursor = 'pointer';
-    zoomImg.style.transition = `transform 0.5s ease-out`;
-    gallery.classList.toggle('show', true);
-    imgResize();
-  });
-}
-
-
-function imgResize(){
-  zoomImg = document.querySelector('.active-img');
-  if(zoomImg === null){ return; }
-  if(window.screen.availWidth > containerWidth * rem){
-    zoomImgWidth = containerWidth / scale;
-    if(containerWidth * rem > window.screen.availHeight * imgAspectRatio){
-      zoomImgWidth = (100 - (margin * 2)) / scale;
-      zoomImg.style.height = `${zoomImgWidth}vh`;
-      zoomImg.style.width = `${zoomImgWidth * imgAspectRatio}vh`;
-    }else{
-      zoomImg.style.height = `${zoomImgWidth / imgAspectRatio}rem`;
-      zoomImg.style.width = `${zoomImgWidth}rem`;
-    }
-    }else{
-    zoomImgWidth = (100 - (margin * 2)) / scale;
-    if(window.screen.availWidth > window.screen.availHeight * imgAspectRatio){
-      zoomImg.style.height = `${zoomImgWidth}vh`;
-      zoomImg.style.width = `${zoomImgWidth * imgAspectRatio}vh`;
-    }else{
-      zoomImg.style.height = `${zoomImgWidth * (1 / imgAspectRatio)}vw`;
-      zoomImg.style.width = `${zoomImgWidth}vw`;
+    for(i = 0; i < progressCards.length; i++){
+      progressCards[i].style.transform = initialPosition;
     }
   }
+  isElementClicked = false;
+  startPosition = 0;
+  posX = 0;
 }
 
+// #endregion 
 
-function findVideos() {
-  if (document.getElementById('videos') === null ){return;}
-  let videos = document.querySelector('.videos').querySelectorAll('.video');
-  for (let i = 0; i < videos.length; i++) {
-      setupVideo(videos[i]);
-  }
-}
-
-function setupVideo(video) {
-  let videolink;
-  let link = video;
-  let media = video.querySelector('.video__img');
-  videolink = media.dataset.link;
-
-  video.addEventListener('click', () => {
-    if(video.classList.contains('video--enabled')) { return; }
-      let iframe = createIframe(videolink);
-      video.insertBefore(iframe, video.firstChild);
-      video.querySelector('.video__img').remove();
-      video.querySelector('.video__preview').remove();
-      video.classList.add('video--enabled');
+// #region accordeon
+document.querySelectorAll('.accordion-header').forEach(item => {
+  const accordion = item.parentNode;
+  item.addEventListener('mouseover', () => {
+      accordion.classList.add('active');
   });
+  accordion.addEventListener('mouseout', (event) => {
+    if (!event.relatedTarget || !accordion.contains(event.relatedTarget)) {
+      accordion.classList.remove('active');
+    }
+  });
+});  
+// #endregion 
 
-  link.removeAttribute('href');
+// #region burger
+  const headerMenu = document.getElementById('headerMenu');
+  const burger = document.getElementById('burger');
+  const burgerContent = document.getElementById('burgerContent');
+  burger.addEventListener('click', () => {
+    if(burgerActive){
+      burgerActive = false;
+      document.querySelector('.header__left').appendChild(document.querySelector('.header__tel'));
+    }else{
+      burgerActive = true;
+      document.querySelector('.header__container').appendChild(document.querySelector('.header__right'));
+      document.querySelector('.header__right').appendChild(document.querySelector('.header__tel'));
+    }
+    document.querySelector('.header__menu').classList.toggle('show');
+    document.querySelector('.header').classList.toggle('burger-active');
+  });
+// #endregion
+
+// #region capabilites
+const capabilityList = document.querySelector('.capabilities__list');
+const listItems = capabilityList.querySelectorAll('li');
+const container = document.querySelector('.capabilities__cards');
+
+listItems.forEach((listItem, index) => {
+  listItem.addEventListener('click', () => {
+    listItems.forEach(item => 
+      item.classList.remove('active-capability'),
+    );
+    listItem.classList.add('active-capability');
+    const thirdElement = container.children[index];
+    container.querySelectorAll('.capabilities__card').forEach((item, index) => {
+      item.style.position = 'absolute';
+      item.style.transform = 'translateY(200%)';
+    });
+    thirdElement.style.display = 'flex';
+    thirdElement.style.position = 'static';
+    setTimeout(() => {
+      thirdElement.style.transform = 'translateY(0)';
+    }, "100");
+    
+    });
+  });
+// #endregion
+
+  const servicesCards = document.querySelector('.services__cards').querySelectorAll('.services-card');
+servicesCards.forEach((listItem, index) => {
+  listItem.addEventListener('click', () => {
+      listItem.classList.toggle('show');
+      listItem.querySelector('.services-card-front').classList.toggle('hide');
+      listItem.querySelector('.services-card-back').classList.toggle('show');
+  });
+});
+
+// #region observer 
+let sections = document.querySelectorAll('section:not(.info)');
+let footer = document.querySelector('footer');
+sections = [...sections, footer];
+let delay = 0;
+
+const observerOptions = {
+    threshold: 0.01
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            setTimeout(() => {
+                entry.target.classList.add('visible');
+            }, delay);
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+sections.forEach(section => {
+  observer.observe(section);
+});
+
+// #endregion
+
+// #region popup 
+function popupcloser(item){
+    let popup = item.closest('.popup');
+    setTimeout(() => {
+      popup.style.transform = 'translateY(-200%)';
+      setTimeout(() => {
+        popup.parentElement.classList.remove('show');
+        popup.classList.remove('show');
+      }, 400);
+    }, 100);
 }
 
-function createIframe(videolink) {
-  let iframe = document.createElement('iframe');
-  iframe.setAttribute('allowfullscreen', '');
-  iframe.setAttribute('allow', 'autoplay');
-  iframe.setAttribute('src', `https://www.youtube.com/embed/${videolink}?rel=0&showinfo=0&autoplay=1`);
-  iframe.classList.add('video');
-  return iframe;
+document.querySelectorAll(".popup-closer").forEach(item => {
+  item.addEventListener('click', () => {
+    popupcloser(item);
+  });
+});
+
+setTimeout(() => {
+  resizeScreen();
+}, 100);
+
+});
+// #endregion
+
+// #region tariffs
+function showTariff(element){
+  let elementId = element.getAttribute('data-tariff');
+  document.querySelector('.main__popup-container').classList.add('show');
+  showedPopup = document.getElementById(elementId);
+  showedPopup.classList.add('show');
+  popupAlign(showedPopup);
+  setTimeout(() => {
+    showedPopup.style.transform = 'translateY(0%)';
+  }, "100");
 }
 
-findVideos();
-
-function chartsMedia(screenSize){
-
-  if( screenSize < 768 ){
-    bigChartFont = false;
+function boxTariff(){
+  boxTariffs.style.position = 'static';
+  boxTariffs.style.display = 'flex';
+  setTimeout(() => {
+    cloudTariffs.style.transform = 'translateX(100%)';
+    boxTariffs.style.transform = 'translateX(0)';
+    cloudTariffs.style.display = 'none';
+  }, "100");
+  boxTariffsCardsOnPage = Math.floor(document.querySelector('.box-tariffs').offsetWidth / document.querySelector('.box-tariffs').querySelector('.tariffs-card').offsetWidth);
+  boxTariffsButton.classList.add('active-button');
+  cloudTariffsButton.classList.remove('active-button');
+  if(boxTariffsCards.length <= (currentBoxTariffsCard + boxTariffsCardsOnPage)){
+    document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
   }else{
-    bigChartFont = true;
+    document.getElementById("tariffs-right-arrow").style.opacity = "1";
   }
-
-  if(bigChartFont === true){
-    titleFontSize = '1.5rem';
-    textFontSize = '1rem';
+  if(currentBoxTariffsCard === 0){
+    document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
   }else{
-    titleFontSize = '1.15rem';
-    textFontSize = '0.85rem';
-  }
-
-  for(i = 0; i < charts.length; i++){
-    charts[i].update({
-      title: {
-        style: {
-          fontSize: titleFontSize
-        }
-      },
-      subtitle: {
-        style: {
-          fontSize: textFontSize
-        }
-      },
-    });
+    document.getElementById("tariffs-left-arrow").style.opacity = "1";
   }
 }
 
-function chartsUptate(){
-
-  if(document.querySelector('.line-chart')){
-    document.querySelectorAll('.line-chart').forEach(item => {
-      if(item.querySelector('.highcharts-legend')){
-        item.querySelector('.highcharts-legend').style.transform = 'translate(0px, 359px)';
-      }
-    });
-  }
-
-  if(document.querySelector('.pie-chart')){
-    document.querySelectorAll('.pie-chart').forEach(item => {
-      if(item.querySelector('.highcharts-legend')){
-      item.querySelector('.highcharts-legend').style.transform = 'translate(50%, 20%)';
-      }
-    });
-  }
-
-  if(themeColor === 'light'){
-    chartBg = "#ffffff";
-    chartTxt = "#000000";
-    gridLineColor = "#e5e5e5";
-    gradient = [[0, "#dfe5ff"],[1, 'rgba(65, 95, 255, 0)']];
+function cloudTariff(){
+  cloudTariffs.style.position = 'static';
+  cloudTariffs.style.display = 'flex';
+  setTimeout(() => {
+    cloudTariffs.style.transform = 'translateX(0)';
+    boxTariffs.style.transform = 'translateX(100%)';
+    boxTariffs.style.display = 'none';
+  }, "100");
+  boxTariffsButton.classList.remove('active-button');
+  cloudTariffsButton.classList.add('active-button');
+  document.querySelector('.box-tariffs').style.display = 'none';
+  document.querySelector('.cloud-tariffs').style.display = 'flex';
+  if( tariffsCards.length <= (currentTariffsCard + tariffsCardsOnPage)){
+    document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
   }else{
-    chartBg = "#000000";
-    chartTxt = "#ffffff";
-    gridLineColor = "#333333";
-    gradient = [[0, blue],[1, 'rgba(65, 95, 255, 0)']];
+    document.getElementById("tariffs-right-arrow").style.opacity = "1";
   }
-
-  for(i = 0; i < charts.length; i++){
-    charts[i].update({
-      gridLineColor: gridLineColor,
-      chart: {
-        style: {
-          gridLineColor: gridLineColor,
-        },
-        backgroundColor: chartBg
-      },
-      gridLineColor: gridLineColor,
-      plotOptions: {
-        area: {
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: gradient
-            },
-            marker: {
-                radius: 2
-            },
-            lineWidth: 1,
-            states: {
-                hover: {
-                    lineWidth: 1
-                }
-            },
-            threshold: 0
-        }
-    },
-      title: {
-        style: {
-            color: chartTxt
-        }
-      },
-
-      yAxis: [{
-        labels: {
-            format: '{value} Sat',
-        },
-        title: {
-            text: '',
-        },
-        gridLineColor: gridLineColor
-        }, {
-        title: {
-            text: '',
-        },
-        labels: {
-            format: '{value} USD',
-        },
-        opposite: true,
-        gridLineColor: gridLineColor
-    }],
-    yAxis: [{
-      labels: {
-          format: '{value} Sat',
-          style: {
-              color: chartTxt
-          }
-      },
-      title: {
-          style: {
-              color: chartTxt
-          }
-      }
-    }, {
-      title: {
-          style: {
-              color: chartTxt
-          }
-      },
-      labels: {
-          format: '{value} USD',
-          style: {
-              color: chartTxt
-          }
-      },
-      opposite: true,
-          gridLineColor: gridLineColor
-      }],
-      xAxis: {
-        title: {
-          style: {
-              color: chartTxt
-          }
-        },
-        labels: {
-            style: {
-              fontSize: axisFontSize,
-              color: chartTxt
-            }
-        }
-      },
-    });
+  if(currentTariffsCard === 0){
+    document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-left-arrow").style.opacity = "1";
   }
 }
+// #endregion 
