@@ -22,6 +22,10 @@ let screenSize;
 let currentBoxTariffsCard = 0;
 let currentTariffsCard = 0;
 
+function isTouchDevice() {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
+
 function popupAlign(showedPopup){
   if(!showedPopup){ return; }
   if(window.innerHeight < showedPopup.offsetHeight){
@@ -118,6 +122,15 @@ document.querySelector('.tariffs__select-container').addEventListener('click', f
       item.classList.remove('show');
     });
     boxTariff();
+  }else if(!document.querySelector('.tariffs__select').classList.contains('active-select')){
+    document.querySelectorAll('.tariffs__option')[1].classList.remove('show');
+  }
+});
+
+document.addEventListener('click', function(e) {
+  if(e.target.id !== 'box-option' && e.target.id !== 'cloud-option'){
+    document.querySelector('.tariffs__select').classList.remove('active-select');
+    document.querySelectorAll('.tariffs__option')[1].classList.remove('show');
   }
 });
 
@@ -426,13 +439,25 @@ if(progressCards.length <= cardsOnPage){
 }
 
 const portfolioCards = document.querySelector('.portfolio__cards').querySelectorAll('.portfolio-card');
-portfolioCards.forEach((listItem) => {
-  listItem.addEventListener('click', () => {
-    if(finishPosition !== 0){ return; }
-      listItem.classList.add('flipped');
+portfolioCards.forEach((listItem, index) => {
+  if (isTouchDevice()) {
+    listItem.addEventListener('click', () => {
+      listItem.classList.toggle('show');
       listItem.querySelector('.portfolio-card-front').classList.toggle('hide');
       listItem.querySelector('.portfolio-card-back').classList.toggle('show');
-  });
+    });
+  }else{
+    listItem.addEventListener('mouseover', () => {
+      //listItem.classList.toggle('show');
+      //listItem.querySelector('.services-card-front').classList.toggle('hide');
+      listItem.querySelector('.portfolio-card-front').classList.add('hide');
+      listItem.querySelector('.portfolio-card-back').classList.add('show');
+    });
+    listItem.addEventListener('mouseout', () => {
+      listItem.querySelector('.portfolio-card-back').classList.remove('show');
+      listItem.querySelector('.portfolio-card-front').classList.remove('hide');
+    });
+  }
 });
 
 progressSlider.addEventListener('mouseup', function(e) {
@@ -569,13 +594,26 @@ listItems.forEach((listItem, index) => {
   });
 // #endregion
 
-  const servicesCards = document.querySelector('.services__cards').querySelectorAll('.services-card');
+const servicesCards = document.querySelector('.services__cards').querySelectorAll('.services-card');
 servicesCards.forEach((listItem, index) => {
-  listItem.addEventListener('click', () => {
+  if (isTouchDevice()) {
+    listItem.addEventListener('click', () => {
       listItem.classList.toggle('show');
       listItem.querySelector('.services-card-front').classList.toggle('hide');
       listItem.querySelector('.services-card-back').classList.toggle('show');
-  });
+    });
+  }else{
+    listItem.addEventListener('mouseover', () => {
+      //listItem.classList.toggle('show');
+      //listItem.querySelector('.services-card-front').classList.toggle('hide');
+      listItem.querySelector('.services-card-front').classList.add('hide');
+      listItem.querySelector('.services-card-back').classList.add('show');
+    });
+    listItem.addEventListener('mouseout', () => {
+      listItem.querySelector('.services-card-back').classList.remove('show');
+      listItem.querySelector('.services-card-front').classList.remove('hide');
+    });
+  }
 });
 
 // #region observer 

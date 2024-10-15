@@ -7,14 +7,63 @@ header(class=`${sectionName}` id=`${sectionName}`)
     div(class=`${bemBlock}left`)
       +img(`${bemBlock}logo`, 'logo.svg')
       div(class=`${bemBlock}tel`) +7 495 109-51-20
-    nav(class=`${bemBlock}menu menu`)
+    nav(class=`${bemBlock}menu menu` id="headerMenu")
       -bemBlock = `menu__`
       -menuLinks = ['Услуги', 'Решения', 'Проекты', 'Компания', 'Контакты']
       -menuHrefs = ['#', '#', '#', '#', '#']
-      ul(class=`${bemBlock}` + 'list'  id="headerContainer")
+      ul(class=`${bemBlock}` + 'list')
         -i = 0
         each link in menuLinks
-          li(class=`${bemBlock}` + 'item')
-            a(class=`${bemBlock}link` href= `${menuHrefs[i]}`)= link
+          li(class=`${bemBlock}` + 'item accordion')
+            if i === 0
+              a.menu__link.accordion-header Услуги
+              ul.accordion__content
+                li.accordion__item
+                  <a class="accordion__link" href="https://new.e-comexpert.ru/">Электронная коммерция</a>
+                li.accordion__item
+                  <a class="accordion__link" href="https://lp.e-comexpert.ru/">Разработка веб-ресурсов для автозапчастей и автотоваров</a>
+                li.accordion__item
+                  <a class="accordion__link" href="#" >Внедрение Битрикс-24</a>
+            else if i === 1
+              a.menu__link.accordion-header Решения
+              ul.accordion__content
+                li.accordion__item
+                  <a class="accordion__link" href="https://lp.e-comexpert.ru/">Интернет-магазин автозапчастей</a>
+                li.accordion__item
+                  <a class="accordion__link" href="#https://wikivin.ru/">Сервис подбора запчастей</a>
+                li.accordion__item
+                  <a class="accordion__link" href="#https://spec-parts.tilda.ws/" >Интернет-магазин запчастей для спецтехники и грузовиков</a>
+                li.accordion__item
+                  <a class="accordion__link" href="#https://partshop-service.tilda.ws/">СТО</a>
+                li.accordion__item
+                  <a class="accordion__link" href="#https://autocard.tilda.ws/" >Карта лояльности для клиентов автомагазинов</a>
+                li.accordion__item
+                  <a class="accordion__link" href="#https://project2567213.tilda.ws/" >Интернет-магазин по продаже б/у запчастей</a>
+            else
+              a(class=`${bemBlock}link` href= `${menuHrefs[i]}`)= link
           -i++
-      button(class=`header__button`) Связаться
+      button(class=`header__button` onclick="showPopup()") Связаться
+    div(class=`header__right`)
+      button(class=`header__burger` id="burger")
+        img(class=`header__burger-img` src="assets/img/common/burger.svg")
+  -bemBlock = `${sectionName}__`
+  div(class=`${bemBlock}popup-container popup-container`)
+    div(class=`${bemBlock}popup popup` id="headerPopup")
+      -newBlock = `popup__`
+        button(class=`${newBlock}closer popup-closer`)
+          img(class=`${newBlock}closer-img` src=`assets/img/closer.svg`)
+        h2(class=`${newBlock}title`) Оставьте заявку 
+          p и мы свяжемся с вами в ближаешее время
+        form(class=`${newBlock}form form` action="#")
+          -newBlock = "form__"
+          input(class=`${newBlock}input` type="text" placeholder="Ваше имя *")
+          input(class=`${newBlock}input` type="tel" placeholder="Ваш телефон *")
+          div(class=`${newBlock}input big-input`)
+            textarea(placeholder="Запрос")
+          button(class=`${newBlock}button`) Оставить заявку
+          div(class=`${newBlock}warning`)
+            label(class=`${newBlock}label`)
+              input(class=`${newBlock}checkbox` type="checkbox")
+              span.custom-checkbox
+            span(class=`${newBlock}alert`) Нажимая на кнопку "Отправить", я даю
+            a(class=`${newBlock}link` href="#") согласие на обработку персональных данных.

@@ -5,23 +5,49 @@ footer(class=`${sectionName}`)
   -newBlock = 'container'
   div(class=`${bemBlock}` + newBlock + ` ${newBlock}`)
     nav(class=`${bemBlock}nav`)
-      -i=0
-      each list in [[{txt: 'Услуги', href: '#'}, {txt: 'Электронная коммерция', href: '#'}, {txt: 'Разработка веб-ресурсов для автозапчастей и автотоваров', href: '#'}, {txt: 'Внедрение Битрикс24', href: '#'}, {txt: 'Услуги', href: '#', src: 'logo.svg'}], [{txt: 'Решения', href: '#'}, {txt: 'Интернет-магазин автозапчастей', href: '#'}, {txt: 'Сервис подбора запчастей', href: '#'}, {txt: 'Интернет-магазин запчастей для спецтехники и грузовиков', href: '#'}, {txt: 'Сайт для СТО', href: '#'}, {txt: 'Карта лояльности для клиентов автомагазинов', href: '#'}, {txt: 'Интернет-магазин по продаже б/у запчастей', href: '#'}], [{txt: 'Проекты', href: '#'}, {txt: 'E-commerce', href: '#'}, {txt: 'B2B-порталы', href: '#'}, {txt: 'Мобильная разработка', href: '#'}, {txt: 'Битрикс24', href: '#'}], [{txt: 'Контакты', href: '#'}, {txt: '+7 495 109-51-20', href: '#'}, {txt: 'info@e-comexpert.ru', href: '#'}, {txt: 'г. Москва, ул. Затонная, д.12, корп.2', href: '#'}, {txt: 'Telegram', href: '#'}, {txt: 'Telegram', href: '#', src: 'footer/arda.png'}]]
-        //- , '', '', ''], ['Решения', 'Интернет-магазин автозапчастей', 'Сервис подбора запчастей', 'Интернет-магазин запчастей для спецтехники и грузовиков', 'Сайт для СТО', 'Карта лояльности для клиентов автомагазинов', 'Интернет-магазин по продаже б/у запчастей'], ['Проекты', 'E-commerce', 'B2B-порталы', 'Мобильная разработка', 'Битрикс24', 'Веб-ресурсы для автозапчастей'], ['Контакты', '+7 495 109-51-20', 'info@e-comexpert.ru', 'г. Москва, ул. Затонная, д.12, корп.2', 'Telegram']]
-        -ii=0
-        ul(class=`${bemBlock}list footer-list`)
+      ul(class=`${bemBlock}nav-list`)
+        -i=0
+        -k = 0
+        -titles = ['Услуги', 'Проекты', 'Решения', 'Контакты']
+        each list in [[{txt: 'Электронная коммерция', href: 'https://new.e-comexpert.ru/'}, {txt: 'Разработка веб-ресурсов для автозапчастей и автотоваров', href: 'https://e-comexpert.ru/'}, {txt: 'Внедрение Битрикс24', href: '#'}, {txt: 'Услуги', href: '#', src: "logo.svg"}], [{txt: 'Интернет-магазин автозапчастей', href: 'https://lp.e-comexpert.ru/'}, {txt: 'Сервис подбора запчастей', href: 'https://wikivin.ru/'}, {txt: 'Интернет-магазин запчастей для спецтехники и грузовиков', href: 'https://spec-parts.tilda.ws/'}, {txt: 'Сайт для СТО', href: 'https://partshop-service.tilda.ws/'}, {txt: 'Карта лояльности для клиентов автомагазинов', href: 'https://autocard.tilda.ws/'}, {txt: 'Интернет-магазин по продаже б/у запчастей', href: 'https://project2567213.tilda.ws/'}], [{txt: 'E-commerce', href: 'https://e-comexpert.ru/projects/'}, {txt: 'B2B-порталы', href: 'https://e-comexpert.ru/projects/'}, {txt: 'Мобильная разработка', href: 'https://e-comexpert.ru/projects/'}, {txt: 'Битрикс24', href: 'https://e-comexpert.ru/solutions/bitrix24'}, {txt: 'Веб-ресурсы для автозапчастей', href: 'https://e-comexpert.ru/'}], [{txt: '+7 495 109-51-20', href: 'tel:+74951095120'}, {txt: 'info@e-comexpert.ru', href: 'mailto:info@e-comexpert.ru'}, {txt: 'г. Москва, ул. Затонная, д.12, корп.2', href: '#'}, {txt: 'Telegram', href: '#'}, {src:'footer/arda.png'}]]
+          -ii=0
           -bemBlock = `footer-list__`
-          each item in list
-            if item.src !== undefined
-              +img('footer__img', item.src)
-            else if ii !== 0
-              li(class=`${bemBlock}item`)
-                a(class=`${bemBlock}link`)= item.txt
-            else
-              li(class=`${bemBlock}item`)
-                h2(class=`${bemBlock}title`)= item.txt
-            -ii++
-        -i++
+          if i === 0
+            li(class=`${bemBlock}item`)
+              span(class=`${bemBlock}title`)= titles[i]
+              ul(class=`${bemBlock}list footer-list`)
+                each item in list
+                  if item.src !== undefined
+                    li(class=`${bemBlock}item item-img`)
+                      +img('footer__img', 'logo.svg', 'logo')
+                    -k++
+                  else
+                    li(class=`${bemBlock}item`)
+                      a(class=`${bemBlock}link` href=`${item.href}` target="_blank")= item.txt
+                  -ii++
+          else if i === 3
+            li(class=`${bemBlock}item`)
+              span(class=`${bemBlock}title`)= titles[i]
+              ul(class=`${bemBlock}list footer-list`)
+                -bemBlock = `footer-list__`
+                each item in list
+                  if item.src !== undefined
+                    li(class=`${bemBlock}item item-contacts-img`)
+                      +img('footer__contacts-img', 'footer/arda.png', 'arda')
+                    -k++
+                  else
+                    li(class=`${bemBlock}item`)
+                      a(class=`${bemBlock}link` href=`${item.href}` target="_blank")= item.txt
+                  -ii++
+          else
+            li(class=`${bemBlock}item`)
+              span(class=`${bemBlock}title`)= titles[i]
+              ul(class=`${bemBlock}list footer-list`)
+                each item in list
+                  li(class=`${bemBlock}item`)
+                    a(class=`${bemBlock}link` href=`${item.href}` target="_blank")= item.txt
+                  -ii++
+          -i++
     -bemBlock = `${sectionName}__`
     div(class=`${bemBlock}copyright`)
       a(class=`${bemBlock}copyright-item` href="https://e-comexpert.ru/agreement/") Пользовательское соглашение
