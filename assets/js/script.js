@@ -12,6 +12,19 @@ let posX = 0;
 let progressCards;
 let boxTariffs;
 let cloudTariffs;
+let tariffsCards;
+let tariffsSlider;
+let tariffsCardsOnPage;
+let boxTariffsCards;
+let boxTariffsSlider;
+let boxTariffsCardsOnPage;
+let screenSize;
+let currentBoxTariffsCard = 0;
+let currentTariffsCard = 0;
+
+function isTouchDevice() {
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
 
 function popupAlign(showedPopup){
   if(!showedPopup){ return; }
@@ -40,7 +53,8 @@ window.addEventListener('resize', () => {
 });
 
 function resizeScreen(){
-  if(window.innerWidth < 1025){
+  screenSize = window.innerWidth;
+  if(screenSize < 1025){
     headerMenu.style.display = 'none';
     burger.style.display = 'flex';
     document.querySelector('.header__right').appendChild(document.querySelector('.header__button'));
@@ -55,22 +69,28 @@ function resizeScreen(){
     document.querySelector('.header__right').appendChild(burger);
     burgerActive = false;
   }
-  if(window.innerWidth < 768){
+  if(screenSize < 768){
     cardsOnPage = 0;
     currentProgressCard = 0;
     for(i = 0; i < progressCards.length; i++){
       progressCards[i].style.transform = `translateX(0)`;
     }
-  }else if(window.innerWidth < 1440  &&  window.innerWidth > 768){
+  }else if(screenSize < 1440  &&  screenSize > 768){
     cardsOnPage = 2;
   }else{
     cardsOnPage = 3;
   }
-  if(window.innerWidth < 768){
+  if(screenSize < 768){
     //document.querySelector('.item-contacts-img').appendChild(document.querySelector('.footer__img'));
     document.querySelector('.item-contacts-img').insertBefore(document.querySelector('.footer__img'), document.querySelector('.item-contacts-img').firstChild);
   }else{
     document.querySelector('.item-img').appendChild(document.querySelector('.footer__img'));
+  }
+  if(document.querySelector('.cloud-tariffs').offsetWidth > 0){
+    tariffsCardsOnPage = Math.floor(document.querySelector('.cloud-tariffs').offsetWidth / document.querySelector('.cloud-tariffs').querySelector('.tariffs-card').offsetWidth);
+  }
+  if(document.querySelector('.box-tariffs').offsetWidth > 0){
+    boxTariffsCardsOnPage = Math.floor(document.querySelector('.box-tariffs').offsetWidth / document.querySelector('.box-tariffs').querySelector('.tariffs-card').offsetWidth);
   }
 }
 
@@ -80,12 +100,37 @@ const boxTariffsButton = document.getElementById('boxTariffsButton');
 const cloudTariffsButton = document.getElementById('cloudTariffsButton');
 boxTariffs = document.querySelector('.box-tariffs');
 cloudTariffs = document.querySelector('.cloud-tariffs');
+tariffsSlider  = document.querySelector(".cloud-tariffs");
+tariffsCards = tariffsSlider.getElementsByClassName("tariffs-card");
+boxTariffsSlider  = document.querySelector(".box-tariffs");
+boxTariffsCards = boxTariffsSlider.getElementsByClassName("tariffs-card");
 
-document.querySelector('.tariffs__select').addEventListener('change', function() {
-  if (this.selectedIndex === 0) {
+document.querySelector('.tariffs__select-container').addEventListener('click', function(e) {
+  document.querySelector('.tariffs__select').classList.toggle('active-select');
+  document.querySelectorAll('.tariffs__option')[1].classList.add('show');
+  if(e.target.id === 'cloud-option' && e.target.classList.contains('show')){
+    document.querySelector('.tariffs__select').appendChild(document.getElementById('cloud-option'));
+    document.querySelector('.tariffs__select-container').appendChild(document.getElementById('box-option'));
+    document.querySelectorAll('.tariffs__option').forEach(item => {
+      item.classList.remove('show');
+    });
     cloudTariff();
-  }else if(this.selectedIndex === 1) {
+  }else if(e.target.id === 'box-option' && e.target.classList.contains('show')){
+    document.querySelector('.tariffs__select').appendChild(document.getElementById('box-option'));
+    document.querySelector('.tariffs__select-container').appendChild(document.getElementById('cloud-option'));
+    document.querySelectorAll('.tariffs__option').forEach(item => {
+      item.classList.remove('show');
+    });
     boxTariff();
+  }else if(!document.querySelector('.tariffs__select').classList.contains('active-select')){
+    document.querySelectorAll('.tariffs__option')[1].classList.remove('show');
+  }
+});
+
+document.addEventListener('click', function(e) {
+  if(e.target.id !== 'box-option' && e.target.id !== 'cloud-option'){
+    document.querySelector('.tariffs__select').classList.remove('active-select');
+    document.querySelectorAll('.tariffs__option')[1].classList.remove('show');
   }
 });
 
@@ -112,6 +157,268 @@ document.querySelectorAll('.buy-button').forEach(item => {
 
 // #endregion 
 
+// #region boxTariffs
+
+
+let isBoxTariffsClicked = false;
+let boxTariffsInitialPosition = `translateX(0)`;
+let boxTariffsFinishPosition = 0;
+let boxTariffsStartPosition = 0;
+let boxTariffsPosX = 0;
+
+document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+
+
+
+function boxTariffsPreviousCard () {
+  if(currentBoxTariffsCard !== 0){
+    if(boxTariffsCards.length < (currentBoxTariffsCard + boxTariffsCardsOnPage)){
+      document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
+    }else{
+      document.getElementById("tariffs-right-arrow").style.opacity = "1";
+    }
+    currentBoxTariffsCard--;
+    if(currentBoxTariffsCard === 0){
+      document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+    }else{
+      document.getElementById("tariffs-left-arrow").style.opacity = "1";
+    }
+    boxTariffsInitialPosition = `translateX(-${currentBoxTariffsCard}00%)`;
+    for(i = 0; i < boxTariffsCards.length; i++){
+      boxTariffsCards[i].style.transform = `translateX(-${currentBoxTariffsCard}00%)`;
+    }
+  }
+}
+
+function boxTariffsNextCard () {
+  if(boxTariffsCards.length >= currentBoxTariffsCard + boxTariffsCardsOnPage){
+    document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-right-arrow").style.opacity = "1";
+  }
+  if(currentBoxTariffsCard >= boxTariffsCards.length - boxTariffsCardsOnPage){
+  }else{
+    currentBoxTariffsCard++;
+    if(currentBoxTariffsCard === 0){
+      document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+    }else{
+      document.getElementById("tariffs-left-arrow").style.opacity = "1";
+    }
+    boxTariffsInitialPosition = `translateX(-${currentBoxTariffsCard}00%)`;
+    for(i = 0; i < boxTariffsCards.length; i++){
+      boxTariffsCards[i].style.transform = `translateX(-${currentBoxTariffsCard}00%)`;
+    }
+  }
+}
+
+boxTariffsSlider.addEventListener('mousedown', function(e) {
+  boxTariffsFinishPosition = e.pageX;
+  isBoxTariffsClicked = true;
+});
+
+boxTariffsSlider.addEventListener('touchstart', function(e) {
+  boxTariffsFinishPosition = e.touches[0].pageX;
+  isBoxTariffsClicked = true;
+});
+
+boxTariffsSlider.addEventListener('mousemove', function(e) {
+  boxTariffsPosX = e.pageX;
+ boxTariffsMoveFunction();
+});
+
+boxTariffsSlider.addEventListener('touchmove', function(e) {
+  boxTariffsPosX = e.touches[0].pageX;
+ boxTariffsMoveFunction();
+});
+
+boxTariffsSlider.addEventListener('mouseup', function(e) {
+  isBoxTariffsClicked = false;
+  boxTariffsSliderFunction();
+});
+
+boxTariffsSlider.addEventListener('touchend', function(e) {
+  isBoxTariffsClicked = false;
+  boxTariffsSliderFunction();
+});
+
+function boxTariffsMoveFunction(){
+  if(isBoxTariffsClicked){
+    boxTariffsCW = boxTariffsSlider.offsetWidth;
+    p = (currentBoxTariffsCard + ((boxTariffsFinishPosition - boxTariffsPosX) / boxTariffsCW)) * 100;
+    if(currentBoxTariffsCard <boxTariffsCards.length){
+      for(i = 0; i <boxTariffsCards.length; i++){
+      if(p > 0){
+       boxTariffsCards[i].style.transform = `translateX(-${p}%)`;
+      }else{
+       boxTariffsCards[i].style.transform = `translateX(${-p}%)`;
+      }
+      }
+    }
+  }
+}
+
+function boxTariffsSliderFunction(){
+  boxTariffsFinishPosition = boxTariffsFinishPosition - boxTariffsPosX;
+  if(currentBoxTariffsCard === 0 || currentBoxTariffsCard === boxTariffsCards.length - boxTariffsCardsOnPage){
+    for(i = 0; i <boxTariffsCards.length; i++){
+      boxTariffsCards[i].style.transform = boxTariffsInitialPosition;
+     }
+  }
+  
+  if(boxTariffsPosX !== 0){
+    if(boxTariffsFinishPosition > 100){
+      boxTariffsNextCard();
+    }else if(boxTariffsFinishPosition < -100){
+      boxTariffsPreviousCard();
+    }else{
+      for(i = 0; i <boxTariffsCards.length; i++){
+       boxTariffsCards[i].style.transform = boxTariffsInitialPosition;
+      }
+    }
+  }
+  isBoxTariffsClicked = false;
+  boxTariffsFinishPosition = 0;
+  boxTariffsPosX = 0;
+}
+
+// #endregion
+
+// #region cloudTariffs
+let isTariffsClicked = false;
+let tariffsInitialPosition = `translateX(0)`;
+let tariffsFinishPosition = 0;
+let tariffsStartPosition = 0;
+let tariffsPosX = 0;
+
+document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+
+document.getElementById('tariffs-right-arrow').addEventListener('click', () => {
+  if(document.querySelector('.box-tariffs').offsetWidth > 0){
+    boxTariffsNextCard();
+  }else{
+    tariffsNextCard();
+  }
+});
+
+document.getElementById('tariffs-left-arrow').addEventListener('click', () => {
+  if(document.querySelector('.box-tariffs').offsetWidth > 0){
+    boxTariffsPreviousCard();
+  }else{
+    tariffsPreviousCard();
+  }
+});
+
+function tariffsPreviousCard () {
+  document.getElementById("tariffs-right-arrow").style.opacity = "1";
+  if(currentTariffsCard <= 1){
+    document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-left-arrow").style.opacity = "1";
+  }
+  if(currentTariffsCard !== 0){
+    currentTariffsCard--;
+    tariffsInitialPosition = `translateX(-${currentTariffsCard}00%)`;
+    for(i = 0; i < tariffsCards.length; i++){
+      tariffsCards[i].style.transform = `translateX(-${currentTariffsCard}00%)`;
+      tariffsCards[i].classList.remove('tariffs-card-focused');
+    }
+    tariffsCards[currentTariffsCard].classList.add('tariffs-card-focused');
+  }
+}
+
+function tariffsNextCard () {
+  if( tariffsCards.length > tariffsCardsOnPage){
+    document.getElementById("tariffs-left-arrow").style.opacity = "1";
+  }
+  if(currentTariffsCard >=  tariffsCards.length - tariffsCardsOnPage - 1){
+    document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-right-arrow").style.opacity = "1";
+  }
+  if(currentTariffsCard >= tariffsCards.length - tariffsCardsOnPage){
+  }else{
+    currentTariffsCard++;
+    tariffsInitialPosition = `translateX(-${currentTariffsCard}00%)`;
+    for(i = 0; i < tariffsCards.length; i++){
+      tariffsCards[i].style.transform = `translateX(-${currentTariffsCard}00%)`;
+      tariffsCards[i].classList.remove('tariffs-card-focused');
+    }
+    tariffsCards[currentTariffsCard].classList.add('tariffs-card-focused');
+  }
+}
+
+tariffsSlider.addEventListener('mousedown', function(e) {
+  tariffsFinishPosition = e.pageX;
+  isTariffsClicked = true;
+});
+
+tariffsSlider.addEventListener('touchstart', function(e) {
+  tariffsFinishPosition = e.touches[0].pageX;
+  isTariffsClicked = true;
+});
+
+tariffsSlider.addEventListener('mousemove', function(e) {
+  tariffsPosX = e.pageX;
+ tariffsMoveFunction();
+});
+
+tariffsSlider.addEventListener('touchmove', function(e) {
+  tariffsPosX = e.touches[0].pageX;
+ tariffsMoveFunction();
+});
+
+tariffsSlider.addEventListener('mouseup', function(e) {
+  isTariffsClicked = false;
+  tariffsSliderFunction();
+});
+
+tariffsSlider.addEventListener('touchend', function(e) {
+  isTariffsClicked = false;
+  tariffsSliderFunction();
+});
+
+function tariffsMoveFunction(){
+  if(isTariffsClicked){
+    tariffsCW = tariffsSlider.offsetWidth;
+    p = (currentTariffsCard + ((tariffsFinishPosition - tariffsPosX) / tariffsCW)) * 100;
+    if(currentTariffsCard <tariffsCards.length){
+      for(i = 0; i <tariffsCards.length; i++){
+      if(p > 0){
+       tariffsCards[i].style.transform = `translateX(-${p}%)`;
+      }else{
+       tariffsCards[i].style.transform = `translateX(${-p}%)`;
+      }
+      }
+    }
+  }
+}
+
+function tariffsSliderFunction(){
+  tariffsFinishPosition = tariffsFinishPosition - tariffsPosX;
+  if(currentTariffsCard === 0 || currentTariffsCard === tariffsCards.length - tariffsCardsOnPage){
+    for(i = 0; i <tariffsCards.length; i++){
+      tariffsCards[i].style.transform = tariffsInitialPosition;
+     }
+  }
+  
+  if(tariffsPosX !== 0){
+    if(tariffsFinishPosition > 100){
+      tariffsNextCard();
+    }else if(tariffsFinishPosition < -100){
+      tariffsPreviousCard();
+    }else{
+      for(i = 0; i <tariffsCards.length; i++){
+       tariffsCards[i].style.transform = tariffsInitialPosition;
+      }
+    }
+  }
+  isTariffsClicked = false;
+  tariffsFinishPosition = 0;
+  tariffsPosX = 0;
+}
+
+// #endregion 
+
 // #region portfolio
 
 document.getElementById('right-arrow').addEventListener('click', () => {
@@ -132,13 +439,25 @@ if(progressCards.length <= cardsOnPage){
 }
 
 const portfolioCards = document.querySelector('.portfolio__cards').querySelectorAll('.portfolio-card');
-portfolioCards.forEach((listItem) => {
-  listItem.addEventListener('click', () => {
-    if(finishPosition !== 0){ return; }
-      listItem.classList.add('flipped');
+portfolioCards.forEach((listItem, index) => {
+  if (isTouchDevice()) {
+    listItem.addEventListener('click', () => {
+      listItem.classList.toggle('show');
       listItem.querySelector('.portfolio-card-front').classList.toggle('hide');
       listItem.querySelector('.portfolio-card-back').classList.toggle('show');
-  });
+    });
+  }else{
+    listItem.addEventListener('mouseover', () => {
+      //listItem.classList.toggle('show');
+      //listItem.querySelector('.services-card-front').classList.toggle('hide');
+      listItem.querySelector('.portfolio-card-front').classList.add('hide');
+      listItem.querySelector('.portfolio-card-back').classList.add('show');
+    });
+    listItem.addEventListener('mouseout', () => {
+      listItem.querySelector('.portfolio-card-back').classList.remove('show');
+      listItem.querySelector('.portfolio-card-front').classList.remove('hide');
+    });
+  }
 });
 
 progressSlider.addEventListener('mouseup', function(e) {
@@ -275,13 +594,26 @@ listItems.forEach((listItem, index) => {
   });
 // #endregion
 
-  const servicesCards = document.querySelector('.services__cards').querySelectorAll('.services-card');
+const servicesCards = document.querySelector('.services__cards').querySelectorAll('.services-card');
 servicesCards.forEach((listItem, index) => {
-  listItem.addEventListener('click', () => {
+  if (isTouchDevice()) {
+    listItem.addEventListener('click', () => {
       listItem.classList.toggle('show');
       listItem.querySelector('.services-card-front').classList.toggle('hide');
       listItem.querySelector('.services-card-back').classList.toggle('show');
-  });
+    });
+  }else{
+    listItem.addEventListener('mouseover', () => {
+      //listItem.classList.toggle('show');
+      //listItem.querySelector('.services-card-front').classList.toggle('hide');
+      listItem.querySelector('.services-card-front').classList.add('hide');
+      listItem.querySelector('.services-card-back').classList.add('show');
+    });
+    listItem.addEventListener('mouseout', () => {
+      listItem.querySelector('.services-card-back').classList.remove('show');
+      listItem.querySelector('.services-card-front').classList.remove('hide');
+    });
+  }
 });
 
 // #region observer 
@@ -329,13 +661,12 @@ document.querySelectorAll(".popup-closer").forEach(item => {
   });
 });
 
-// #endregion
-
 setTimeout(() => {
   resizeScreen();
 }, 100);
 
 });
+// #endregion
 
 // #region tariffs
 function showTariff(element){
@@ -357,8 +688,19 @@ function boxTariff(){
     boxTariffs.style.transform = 'translateX(0)';
     cloudTariffs.style.display = 'none';
   }, "100");
+  boxTariffsCardsOnPage = Math.floor(document.querySelector('.box-tariffs').offsetWidth / document.querySelector('.box-tariffs').querySelector('.tariffs-card').offsetWidth);
   boxTariffsButton.classList.add('active-button');
   cloudTariffsButton.classList.remove('active-button');
+  if(boxTariffsCards.length <= (currentBoxTariffsCard + boxTariffsCardsOnPage)){
+    document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-right-arrow").style.opacity = "1";
+  }
+  if(currentBoxTariffsCard === 0){
+    document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-left-arrow").style.opacity = "1";
+  }
 }
 
 function cloudTariff(){
@@ -373,5 +715,15 @@ function cloudTariff(){
   cloudTariffsButton.classList.add('active-button');
   document.querySelector('.box-tariffs').style.display = 'none';
   document.querySelector('.cloud-tariffs').style.display = 'flex';
+  if( tariffsCards.length <= (currentTariffsCard + tariffsCardsOnPage)){
+    document.getElementById("tariffs-right-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-right-arrow").style.opacity = "1";
+  }
+  if(currentTariffsCard === 0){
+    document.getElementById("tariffs-left-arrow").style.opacity = "0.72";
+  }else{
+    document.getElementById("tariffs-left-arrow").style.opacity = "1";
+  }
 }
 // #endregion 

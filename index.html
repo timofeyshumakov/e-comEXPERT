@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="assets/img/logo.svg">
     <title>e-comEXPERT</title>
-    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <script src="assets/js/script.js"></script>
   </head>
   <body>
@@ -205,10 +205,9 @@
               <button class="tariffs__button active-button" id="cloudTariffsButton">Облачные решения</button>
               <button class="tariffs__button" id="boxTariffsButton">Коробочные решения</button>
             </div>
-            <select class="tariffs__select">
-              <option>Облачные решения</option>
-              <option>Коробочные решения</option>
-            </select>
+            <div class="tariffs__select-container">
+              <div class="tariffs__select"><span class="tariffs__option" id="cloud-option">Облачные решения</span></div><span class="tariffs__option" id="box-option">Коробочные решения</span>
+            </div>
             <h3 class="tariffs__sub-title">Цена за месяц при покупке на год:</h3>
             <div class="tariffs__cards-container">
               <div class="tariffs__cards cloud-tariffs">
@@ -324,6 +323,12 @@
               </div>
             </div>
             <div class="tariffs__info">Цены указаны за всю компанию, а не за отдельных пользователей</div>
+            <div class="tariffs__slider">
+              <button class="tariffs__slider-button" id="tariffs-left-arrow"><img class="tariffs__slider-arrow" src="assets/img/portfolio/left-arrow.svg">
+              </button>
+              <button class="tariffs__slider-button" id="tariffs-right-arrow"><img class="tariffs__slider-arrow" src="assets/img/portfolio/right-arrow.svg">
+              </button>
+            </div>
           </div>
         </section>
         <div class="main__popup-container popup-container">
